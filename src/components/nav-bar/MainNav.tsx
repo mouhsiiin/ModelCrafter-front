@@ -4,9 +4,10 @@ import { UserNav } from "./user-nav";
 
 // Define navigation items as a constant for easier maintenance
 const NAV_ITEMS = [
-  { label: 'Dashboard', path: '/dashboard' },
-  { label: 'Projects', path: '/projects' },
-  { label: 'Datasets', path: '/datasets' },
+  { label: "", path: "/" },
+  // { label: 'Dashboard', path: '/dashboard' },
+  // { label: 'Projects', path: '/projects' },
+  // { label: 'Datasets', path: '/datasets' },
 ];
 
 export function MainNav() {
@@ -16,7 +17,7 @@ export function MainNav() {
 
   return (
     <div className="bg-black w-full flex py-4">
-      <div className="container mx-auto flex justify-around items-center">
+      <div className="container mx-auto flex justify-between items-center">
         <Link 
           to="/" 
           className="flex items-center space-x-2 group"
@@ -45,7 +46,7 @@ export function MainNav() {
           ))}
         </nav>
       </div>
-      <div className="justify-end mr-4">
+      <div className="justify-between mr-4">
         <UserNav />
       </div>
     </div>

@@ -1,0 +1,1 @@
+sudo docker build -f DockerFile.dev -t ml-web-dev . && sudo docker run -p 5173:5173 ml-web-dev
