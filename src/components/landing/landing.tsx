@@ -2,6 +2,7 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ChevronRight, BarChart3, Database, Brain, Lock } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 export const LandingPage: React.FC = () => {
   return (
@@ -17,10 +18,17 @@ export const LandingPage: React.FC = () => {
             model training, and result visualization.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="bg-primary hover:bg-primary/90">
-              Get Started
-              <ChevronRight className="ml-2 h-4 w-4" />
-            </Button>
+            <Link to="/signup">
+              <Button size="lg" className="bg-primary hover:bg-primary/90">
+                Get Started
+                <ChevronRight className="ml-2 h-4 w-4" />
+              </Button>
+            </Link>
+            <Link to="/login">
+                <Button size="lg" variant="outline">
+                    Login
+                </Button>
+            </Link>
             <Button size="lg" variant="outline">
               Learn More
             </Button>
@@ -87,10 +95,18 @@ export const LandingPage: React.FC = () => {
                 Join now to access all features and streamline your machine learning workflow.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button size="lg" className="bg-primary hover:bg-primary/90">
-                  Sign Up Now
-                  <ChevronRight className="ml-2 h-4 w-4" />
-                </Button>
+                <Link to="/signup">
+                  <Button size="lg" className="bg-primary hover:bg-primary/90">
+                    Sign Up Now
+                    <ChevronRight className="ml-2 h-4 w-4" />
+                  </Button>
+                </Link>
+                <Link to="/login">
+                    <Button size="lg" variant="outline">
+                        Login
+                    </Button>
+                </Link>
+                    
                 <Button size="lg" variant="outline">
                   View Demo
                 </Button>

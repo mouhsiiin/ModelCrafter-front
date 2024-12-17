@@ -1,5 +1,8 @@
-import React, { createContext, useContext, useState } from 'react';
-import { AuthState, User } from '@/lib/types/auth';
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import { jwtDecode } from 'jwt-decode';  // Recommended: use a proper JWT decoding library
+import api from '@/services/api';  // Import the Axios instance
+import { User, TokenResponse, AuthState } from '@/lib/types/auth';
+
 
 interface AuthContextType extends AuthState {
   login: (email: string, password: string) => Promise<void>;
@@ -8,6 +11,7 @@ interface AuthContextType extends AuthState {
   continueAsGuest: () => void;
 }
 
+// Create the context
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -17,60 +21,81 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     isGuest: false,
   });
 
+  useEffect(() => {
+    // Check if there's a token in localStorage and validate it
+    const token = localStorage.getItem('access_token');
+    if (token) {
+      try {
+        // Use jwt-decode for safe token decoding
+        const decodedUser = jwtDecode<User>(token);
+        setAuthState({ 
+          user: decodedUser, 
+          isAuthenticated: true, 
+          isGuest: false 
+        });
+      } catch (error) {
+        // If token is invalid, remove it
+        localStorage.removeItem('access_token');
+      }
+    }
+  }, []);
+
   const login = async (email: string, password: string) => {
     try {
-
-      // const response = await fetch('/api/login', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({ email, password }),
-      // });
-
-      // bypass the login process
-      const user: User = {
-        id: '1',
-        name: 'John Doe',
-        email: email,
-      };
+      const requestBody = new URLSearchParams({
+        username: email,
+        password: password
+      });
+  
+      const response = await api.post<TokenResponse>('/token', requestBody, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'accept': 'application/json'
+        }
+      });
+  
+      const { access_token } = response.data;
+      localStorage.setItem('access_token', access_token);
+  
+      // Safely decode the token
+      const user = jwtDecode<User>(access_token);
       setAuthState({ user, isAuthenticated: true, isGuest: false });
-      console.log('Login successful');
-      // if (!response.ok) throw new Error('Login failed');
-      
-      // const user = await response.json();
-      // setAuthState({ user, isAuthenticated: true, isGuest: false });
     } catch (error) {
+      console.error('Login error:', error);
       throw new Error('Login failed. Please try again.');
     }
   };
 
+
   const signup = async (email: string, password: string, name: string) => {
     try {
-      // TODO: Implement actual API call
-      const response = await fetch('/api/signup', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password, name }),
-      });
-      
-      if (!response.ok) throw new Error('Signup failed');
-      
-      const user = await response.json();
+      const requestBody = {
+        email: email,
+        password: password,
+        username: name
+      };
+
+      const response = await api.post<TokenResponse>('/users/register', requestBody);
+
+      const { access_token } = response.data;
+      localStorage.setItem('access_token', access_token);
+
+      // Safely decode the token
+      const user = jwtDecode<User>(access_token);
       setAuthState({ user, isAuthenticated: true, isGuest: false });
     } catch (error) {
+      console.error('Signup error:', error);
       throw new Error('Signup failed. Please try again.');
     }
   };
 
   const logout = () => {
+    localStorage.removeItem('access_token');
     setAuthState({ user: null, isAuthenticated: false, isGuest: false });
   };
 
   const continueAsGuest = () => {
-    setAuthState({
-      user: null,
-      isAuthenticated: false,
-      isGuest: true,
-    });
+    setAuthState({ user: null, isAuthenticated: false, isGuest: true });
   };
 
   return (
@@ -81,9 +106,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 };
 
 export const useAuth = () => {
-    const context = useContext(AuthContext);
-    if (context === undefined) {
-      throw new Error('useAuth must be used within an AuthProvider');
-    }
-    return context;
-  };
+  const context = useContext(AuthContext);
+  if (context === undefined) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
+};

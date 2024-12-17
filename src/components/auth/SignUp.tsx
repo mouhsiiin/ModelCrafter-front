@@ -41,9 +41,9 @@ export const SignUp: React.FC = () => {
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="name">Full Name</Label>
+              <Label htmlFor="username">Full Name</Label>
               <Input
-                id="name"
+                id="username"
                 placeholder="Enter your name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}

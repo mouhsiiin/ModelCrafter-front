@@ -9,3 +9,8 @@ export interface User {
     isAuthenticated: boolean;
     isGuest: boolean;
   }
+
+  export interface TokenResponse {
+    access_token: string;
+    token_type: string;
+  }

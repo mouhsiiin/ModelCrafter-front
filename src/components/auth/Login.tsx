@@ -40,11 +40,11 @@ export const Login: React.FC = () => {
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email_username">Email or Username</Label>
               <Input
-                id="email"
-                type="email"
-                placeholder="Enter your email"
+                id="email_username"
+                type="text"
+                placeholder="Enter your email or username"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required

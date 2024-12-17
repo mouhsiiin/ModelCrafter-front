@@ -3,7 +3,6 @@ import { Login, SignUp, GuestAccess } from '@/components/auth';
 import { Dashboard } from '@/components/dashboard';
 import { ProjectDetails } from '@/components/project';
 import { DatasetList } from '@/components/dataset';
-import { VisualizationsPage } from '@/components/visualizations';
 import { Settings } from '@/components/settings';
 import { ProtectedRoute } from './ProtectedRoute';
 import { MainNav } from '@/components/nav-bar/MainNav';

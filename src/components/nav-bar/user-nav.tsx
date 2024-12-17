@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import {
@@ -8,11 +8,17 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
 export function UserNav() {
+  const navigate = useNavigate()
+
+  const handelLogout = () => {
+    localStorage.removeItem('access_token')
+    navigate('/')
+  }
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -47,9 +53,9 @@ export function UserNav() {
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
-          <Link to="/logout">
+          <div onClick={handelLogout} className="w-full">
             Log out
-          </Link>
+          </div>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
