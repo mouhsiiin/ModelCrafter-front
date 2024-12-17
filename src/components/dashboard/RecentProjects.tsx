@@ -6,10 +6,11 @@ import {
     TableHeader,
     TableRow,
   } from "@/components/ui/table";
-  import { Button } from "@/components/ui/button";
+  import { Button } from "../ui/button";
   import { RecentProjectsProps } from "@/lib/types/dashboard";
+  import { Link } from "react-router-dom";
   
-  export const RecentProjects = ({ projects, onOpenProject }: RecentProjectsProps) => {
+  export const RecentProjects = ({ projects }: RecentProjectsProps) => {
     return (
       <div className="space-y-4">
         <h2 className="text-xl font-semibold">Recent Projects</h2>
@@ -37,13 +38,11 @@ import {
                 </TableCell>
                 <TableCell>{project.lastModified}</TableCell>
                 <TableCell className="text-right">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => onOpenProject(project.id)}
-                  >
-                    Open
-                  </Button>
+                  <Link to={`/projects/${project.id}`}>
+                    <Button size="sm" variant="ghost">
+                      Open
+                    </Button>
+                  </Link>
                 </TableCell>
               </TableRow>
             ))}

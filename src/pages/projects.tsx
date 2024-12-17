@@ -1,8 +1,7 @@
-import { ProjectList } from "@/components/project"
-import { CreateProjectButton } from "@/components/project/create-project-button"
+import { ProjectList, CreateProjectButton } from "@/components/project"
 
 
-export default function ProjectsPage() {
+export function ProjectsPage() {
   return (
     <div className="container mx-auto py-10">
       <div className="flex justify-between items-center mb-6">

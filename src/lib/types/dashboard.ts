@@ -8,5 +8,4 @@ export interface DashboardMetricsProps {
   
   export interface RecentProjectsProps {
     projects: Project[];
-    onOpenProject: (id: string) => void;
   }

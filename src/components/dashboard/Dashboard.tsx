@@ -4,6 +4,7 @@ import { Plus } from 'lucide-react';
 import { DashboardMetrics } from './Metrics';
 import { RecentProjects } from './RecentProjects';
 import { Project } from '@/lib/types/project';
+import { CreateProjectButton } from '../project/create-project-button';
 
 export const Dashboard = () => {
   const [projects] = useState<Project[]>([
@@ -24,11 +25,7 @@ export const Dashboard = () => {
   const handleCreateProject = () => {
     // Implement project creation logic
     console.log('Creating new project');
-  };
-
-  const handleOpenProject = (id: string) => {
-    // Implement project opening logic
-    console.log('Opening project:', id);
+    return <CreateProjectButton />;
   };
 
   return (
@@ -54,7 +51,6 @@ export const Dashboard = () => {
 
       <RecentProjects
         projects={projects}
-        onOpenProject={handleOpenProject}
       />
     </div>
   );

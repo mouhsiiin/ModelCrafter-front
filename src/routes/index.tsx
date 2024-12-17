@@ -1,19 +1,36 @@
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { Login, SignUp, GuestAccess } from '@/components/auth';
 import { Dashboard } from '@/components/dashboard';
-import { ProjectList, ProjectDetails } from '@/components/project';
+import { ProjectDetails } from '@/components/project';
 import { DatasetList } from '@/components/dataset';
 import { VisualizationsPage } from '@/components/visualizations';
 import { Settings } from '@/components/settings';
 import { ProtectedRoute } from './ProtectedRoute';
-import { MainNav } from './MainNav';
+import { MainNav } from '@/components/nav-bar/MainNav';
+import { LandingPage } from '@/components/landing';
+import { ProjectsPage } from '@/pages/projects';
 
+// Main Routes Component
 export const AppRoutes = () => {
+  const location = useLocation(); // Get current route location
+
+  // Paths where Navbar should NOT appear
+  const authPaths = ['/login', '/signup', '/guest'];
+
+  // Check if current route is in authPaths
+  const hideNavbar = authPaths.includes(location.pathname);
+
   return (
     <>
-      <MainNav />
+      {/* Conditionally Render Navbar */}
+      {!hideNavbar && <MainNav />}
+
+      {/* Define Routes */}
       <Routes>
-        {/* Public Routes */}
+        {/* Landing Page Route */}
+        <Route path="/" element={<LandingPage />} />
+
+        {/* Authentication Routes */}
         <Route
           path="/login"
           element={
@@ -48,13 +65,13 @@ export const AppRoutes = () => {
             </ProtectedRoute>
           }
         />
-        
+
         {/* Project Routes */}
         <Route
           path="/projects"
           element={
             <ProtectedRoute guestAllowed>
-              <ProjectList />
+              <ProjectsPage />
             </ProtectedRoute>
           }
         />
@@ -84,17 +101,6 @@ export const AppRoutes = () => {
             </ProtectedRoute>
           }
         />
-
-        {/* Visualization Route */}
-        <Route
-          path="/visualizations"
-          element={
-            <ProtectedRoute guestAllowed>
-              <VisualizationsPage />
-            </ProtectedRoute>
-          }
-        />
-
         {/* Settings Route */}
         <Route
           path="/settings"
@@ -105,11 +111,8 @@ export const AppRoutes = () => {
           }
         />
 
-        {/* Redirect root to dashboard */}
-        <Route path="/" element={<Navigate to="/dashboard" replace />} />
-
-        {/* 404 Route */}
-        <Route path="*" element={<Navigate to="/dashboard" replace />} />
+        {/* Default Redirect for Unknown Routes */}
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </>
   );
