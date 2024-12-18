@@ -14,8 +14,9 @@ export const ProjectDetails = () => {
       {[
         { section: 'upload', icon: Upload, label: 'Data Upload' },
         { section: 'prepare', icon: Database, label: 'Data Preparation' },
-        { section: 'analyze', icon: BarChart, label: 'Analysis' },
-        { section: 'settings', icon: Settings, label: 'Settings' }
+        { section: 'visual', icon: BarChart, label: 'Visualization' },
+        { section: 'Model', icon: Settings, label: 'Model Selection' },
+        { section: 'Evaluation', icon: Settings, label: 'Evaluation' }
       ].map(({ section, icon: Icon, label }) => (
         <Button
           key={section}
