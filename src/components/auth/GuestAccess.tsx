@@ -23,7 +23,7 @@ export const GuestAccess: React.FC = () => {
 
   const handleGuestAccess = () => {
     continueAsGuest();
-    navigate('/projects');
+    navigate('/project_details_guest');
   };
 
   return (

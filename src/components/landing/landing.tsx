@@ -24,11 +24,6 @@ export const LandingPage: React.FC = () => {
                 <ChevronRight className="ml-2 h-4 w-4" />
               </Button>
             </Link>
-            <Link to="/login">
-                <Button size="lg" variant="outline">
-                    Login
-                </Button>
-            </Link>
             <Button size="lg" variant="outline">
               Learn More
             </Button>

@@ -1,37 +1,67 @@
 import { useState } from 'react';
-import { Upload, BarChart, Settings, Database } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Upload, ChartNetwork, Gauge, Database, Cog } from 'lucide-react';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import { Stepper } from '../ui/stepper';
+        
 
 export const ProjectDetails = () => {
+  
+  const [currentStep, setCurrentStep] = useState(0)
+  //const [orientation, setOrientation] = useState<'horizontal' | 'vertical'>('horizontal')
+  //const [variant, setVariant] = useState<'default' | 'outline' | 'ghost'>('default')
+  //const [size, setSize] = useState<'sm' | 'md' | 'lg'>('md')
+  const [showStepNumbers, setShowStepNumbers] = useState(true)
+  const [allowClickableSteps, setAllowClickableSteps] = useState(false)
+
   const [activeSection, setActiveSection] = useState('upload');
 
+  const steps = [
+    { title: 'Data Upload', description: 'Upload your data', icon: <Upload className="w-4 h-4" />},
+    { title: 'Data Preparation', description: 'Prepare your data', icon: <Database className="w-4 h-4" />},
+    { title: 'Visualization', description: 'Add payment method', icon: <ChartNetwork className="w-4 h-4" />},
+    { title: 'Build Model', description: 'Add a your build model', icon: <Cog className='w-4 h-4' />},
+    { title: 'Evaluation', description: 'Complete setup', icon: <Gauge className="w-4 h-4" />},
+  ]
+
+  const handleNext = () => {
+    setCurrentStep((prev) => Math.min(prev + 1, steps.length - 1))
+  }
+
+  const handlePrevious = () => {
+    setCurrentStep((prev) => Math.max(prev - 1, 0))
+  }
+
   const Navigation = () => (
-    <div className="flex space-x-4 mb-6">
-      {[
-        { section: 'upload', icon: Upload, label: 'Data Upload' },
-        { section: 'prepare', icon: Database, label: 'Data Preparation' },
-        { section: 'visual', icon: BarChart, label: 'Visualization' },
-        { section: 'Model', icon: Settings, label: 'Model Selection' },
-        { section: 'Evaluation', icon: Settings, label: 'Evaluation' }
-      ].map(({ section, icon: Icon, label }) => (
-        <Button
-          key={section}
-          variant={activeSection === section ? 'default' : 'outline'}
-          onClick={() => setActiveSection(section)}
-          className={`flex items-center space-x-2 ${
-            activeSection === section 
-              ? 'bg-primary text-primary-foreground' 
-              : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
-          }`}
-        >
-          <Icon className="w-4 h-4" />
-          <span>{label}</span>
-        </Button>
-      ))}
+    <div className="container">
+      <Card>
+        <CardHeader>
+          <CardTitle>Advanced Stepper Example</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Stepper
+            steps={steps}
+            currentStep={currentStep}
+            onStepChange={setCurrentStep}
+            orientation='horizontal'
+            variant='outline'
+            size='md'
+            showStepNumbers={showStepNumbers}
+            allowClickableSteps={allowClickableSteps}
+          />
+        </CardContent>
+        <CardFooter className="flex justify-between">
+          <Button onClick={handlePrevious} disabled={currentStep === 0}>
+            Previous
+          </Button>
+          <Button onClick={handleNext} disabled={currentStep === steps.length - 1}>
+            {currentStep === steps.length - 1 ? 'Finish' : 'Next'}
+          </Button>
+        </CardFooter>
+      </Card>
     </div>
   );
 
@@ -204,3 +234,7 @@ export const ProjectDetails = () => {
     </div>
   );
 };
+function setCurrentStep(arg0: (prev: any) => number) {
+  throw new Error('Function not implemented.');
+}
+

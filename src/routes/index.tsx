@@ -77,6 +77,15 @@ export const AppRoutes = () => {
         <Route
           path="/projects/:projectId"
           element={
+            <ProtectedRoute requireAuth={true}>
+              <ProjectDetails />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/project_details_guest"
+          element={
             <ProtectedRoute guestAllowed>
               <ProjectDetails />
             </ProtectedRoute>

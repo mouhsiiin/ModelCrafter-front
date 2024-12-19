@@ -20,6 +20,7 @@ export function CreateProjectButton() {
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault()
     // Handle project creation logic here
+    
     setOpen(false)
   }
 
