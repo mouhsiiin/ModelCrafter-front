@@ -5,20 +5,14 @@ import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Switch } from '@/components/ui/switch';
-import { Label } from '@/components/ui/label';
 import { Stepper } from '../ui/stepper';
+
+import { DataPreparationSection } from './DataPreparation'
+
 
 export const ProjectDetails = () => {
   const [currentStep, setCurrentStep] = useState(0);
-  const [preprocessingOptions, setPreprocessingOptions] = useState({
-    missing_values_handling: '',
-    handling_duplicates: false,
-    scaling_method: '',
-    feature_selection: '',
-    encoding_method: '',
-    data_split: ''
-  });
+
 
   // Rest of your existing steps and navigation code remains the same
   const steps = [
@@ -52,14 +46,8 @@ export const ProjectDetails = () => {
     setCurrentStep((prev) => Math.max(prev - 1, 0));
   };
 
-  const handlePreprocessingChange = (option: string, value: string | boolean) => {
-    setPreprocessingOptions(prev => ({
-      ...prev,
-      [option]: value
-    }));
-  };
 
-  // Your existing Navigation component remains the same
+
   const Navigation = () => (
     <div className="w-full">
       <Card className="p-6">
@@ -110,151 +98,6 @@ export const ProjectDetails = () => {
     </Card>
   );
 
-  const DataPreparationSection = () => (
-    <Card>
-      <CardHeader>
-        <CardTitle>Data Preparation</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="grid md:grid-cols-2 gap-4">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">Data Preview</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground">No dataset selected</p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">Preprocessing Options</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              {/* Missing Values Handling (MVH) */}
-              <div>
-                <Label className="block text-sm font-medium mb-2">
-                  Handle Missing Values
-                </Label>
-                <Select 
-                  value={preprocessingOptions.missing_values_handling}
-                  onValueChange={(value) => handlePreprocessingChange('missing_values_handling', value)}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select option" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="remove">Remove rows</SelectItem>
-                    <SelectItem value="mean">Fill with mean</SelectItem>
-                    <SelectItem value="median">Fill with median</SelectItem>
-                    <SelectItem value="mode">Fill with mode</SelectItem>
-                    <SelectItem value="constant">Fill with constant</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              
-              <div className="flex items-center justify-between">
-                <Label className="text-sm font-medium">Handle Duplicates</Label>
-                <Switch
-                  checked={preprocessingOptions.handling_duplicates}
-                  onCheckedChange={(checked) => handlePreprocessingChange('handling_duplicates', checked)}
-                />
-              </div>
-
-    
-              <div>
-                <Label className="block text-sm font-medium mb-2">
-                  Feature Scaling
-                </Label>
-                <Select
-                  value={preprocessingOptions.scaling_method}
-                  onValueChange={(value) => handlePreprocessingChange('scaling_method', value)}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select scaling" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="none">None</SelectItem>
-                    <SelectItem value="minmax">Min-Max Scaling</SelectItem>
-                    <SelectItem value="standard">Standard Scaling</SelectItem>
-                    <SelectItem value="robust">Robust Scaling</SelectItem>
-                    <SelectItem value="normalizer">Normalizer</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-             
-              <div>
-                <Label className="block text-sm font-medium mb-2">
-                  Feature Selection
-                </Label>
-                <Select
-                  value={preprocessingOptions.feature_selection}
-                  onValueChange={(value) => handlePreprocessingChange('feature_selection', value)}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select feature selection method" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="none">None</SelectItem>
-                    <SelectItem value="variance">Chi_Square</SelectItem>
-                    <SelectItem value="rfe">RFE</SelectItem>
-                    <SelectItem value="anova">Anova</SelectItem>
-                    <SelectItem value="kbest">Select K Best</SelectItem>
-                    <SelectItem value="rfe">Recursive Feature Elimination</SelectItem>
-                    <SelectItem value="lasso">Lasso Selection</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              
-              <div>
-                <Label className="block text-sm font-medium mb-2">
-                  Encoding Method
-                </Label>
-                <Select
-                  value={preprocessingOptions.encoding_method}
-                  onValueChange={(value) => handlePreprocessingChange('encoding_method', value)}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select encoding method" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="none">None</SelectItem>
-                    <SelectItem value="label">Label Encoding</SelectItem>
-                    <SelectItem value="onehot">One-Hot Encoding</SelectItem>
-                    <SelectItem value="ordinal">Ordinal Encoding</SelectItem>
-                    <SelectItem value="binary">Binary Encoding</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              
-              <div>
-                <Label className="block text-sm font-medium mb-2">
-                  Data Split Ratio
-                </Label>
-                <Select
-                  value={preprocessingOptions.data_split}
-                  onValueChange={(value) => handlePreprocessingChange('data_split', value)}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select split ratio" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="70-30">70% Train - 30% Test</SelectItem>
-                    <SelectItem value="80-20">80% Train - 20% Test</SelectItem>
-                    <SelectItem value="90-10">90% Train - 10% Test</SelectItem>
-                    <SelectItem value="custom">Custom Split</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-      </CardContent>
-    </Card>
-  );
 
   const VisualizationSection = () => (
     <Card>
