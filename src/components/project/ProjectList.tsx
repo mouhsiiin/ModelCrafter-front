@@ -14,6 +14,7 @@ const initialProjects = [
   {
     id: 1,
     name: "Customer Churn Prediction",
+    description: "Predict customer churn using machine learning",
     status: "In Progress",
     createdAt: "2024-01-15",
     team: "Data Science",
@@ -21,16 +22,16 @@ const initialProjects = [
   {
     id: 2,
     name: "E-commerce Recommendation System",
+    description: "Build a recommendation system for an e-commerce platform",
     status: "Planning",
     createdAt: "2024-02-20",
-    team: "Machine Learning",
   },
   {
     id: 3,
     name: "Fraud Detection Model",
+    description: "Detect fraudulent transactions in real-time",
     status: "Completed",
     createdAt: "2023-12-10",
-    team: "Risk Analytics",
   }
 ]
 
@@ -48,7 +49,6 @@ export function ProjectList() {
           <TableHead>Project Name</TableHead>
           <TableHead>Status</TableHead>
           <TableHead>Created At</TableHead>
-          <TableHead>Team</TableHead>
           <TableHead>Actions</TableHead>
         </TableRow>
       </TableHeader>
@@ -66,7 +66,6 @@ export function ProjectList() {
               </span>
             </TableCell>
             <TableCell>{project.createdAt}</TableCell>
-            <TableCell>{project.team}</TableCell>
             <TableCell>
               <div className="flex space-x-2">
                 <Button asChild size="sm">

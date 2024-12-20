@@ -78,13 +78,20 @@ export const SignUp: React.FC = () => {
             </Button>
           </form>
         </CardContent>
-        <CardFooter>
+        <CardFooter className="flex flex-col space-y-2">
           <Button
             variant="ghost"
             className="w-full"
             onClick={() => navigate('/login')}
           >
             Already have an account? Sign in
+          </Button>
+          <Button
+            variant="ghost"
+            className="w-full"
+            onClick={() => navigate('/guest')}
+          >
+            Continue as Guest
           </Button>
         </CardFooter>
       </Card>
