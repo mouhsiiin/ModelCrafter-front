@@ -8,10 +8,12 @@ import { ProtectedRoute } from './ProtectedRoute';
 import { MainNav } from '@/components/nav-bar/MainNav';
 import { LandingPage } from '@/components/landing';
 import { ProjectsPage } from '@/pages/projects';
+import { useAuth } from '@/context/auth';
 
 // Main Routes Component
 export const AppRoutes = () => {
   const location = useLocation(); // Get current route location
+  const { isAuthenticated } = useAuth(); // Get auth state
 
   // Paths where Navbar should NOT appear
   const authPaths = ['/login', '/signup', '/guest'];
@@ -27,7 +29,7 @@ export const AppRoutes = () => {
       {/* Define Routes */}
       <Routes>
         {/* Landing Page Route */}
-        <Route path="/" element={<LandingPage />} />
+        <Route path="/" element={isAuthenticated ? <Navigate to="/dashboard" /> : <LandingPage />} />
 
         {/* Authentication Routes */}
         <Route
