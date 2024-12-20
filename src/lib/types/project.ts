@@ -3,6 +3,7 @@ export interface Project {
     name: string;
     status: 'active' | 'completed' | 'archived';
     lastModified: string;
+    created_at: Date;
   }
 
 export interface ProjectForm {

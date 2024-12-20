@@ -15,7 +15,6 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   const { isAuthenticated, isGuest } = useAuth();
   const location = useLocation();
 
-  console.log('isAuthenticated', isAuthenticated);
 
   // If auth is required and user is not authenticated
   if (requireAuth && !isAuthenticated && (!guestAllowed || !isGuest)) {

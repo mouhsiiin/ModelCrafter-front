@@ -191,6 +191,7 @@ export const Dashboard = () => {
               <TableRow>
                 <TableHead>Name</TableHead>
                 <TableHead>Status</TableHead>
+                <TableHead>Created At</TableHead>
                 <TableHead className="text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
@@ -211,6 +212,7 @@ export const Dashboard = () => {
                       {project.status}
                     </span>
                   </TableCell>
+                  <TableCell>{project.created_at.toLocaleString()}</TableCell>
                   <TableCell className="text-right space-x-2">
                     <Link to={`/projects/${project.id}`}>
                       <Button size="sm" variant="ghost">
