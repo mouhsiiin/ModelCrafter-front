@@ -59,7 +59,7 @@ export const AppRoutes = () => {
         <Route
           path="/dashboard"
           element={
-            <ProtectedRoute guestAllowed>
+            <ProtectedRoute requireAuth={true}>
               <Dashboard />
             </ProtectedRoute>
           }
@@ -69,7 +69,7 @@ export const AppRoutes = () => {
         <Route
           path="/projects"
           element={
-            <ProtectedRoute guestAllowed>
+            <ProtectedRoute requireAuth={true}>
               <ProjectsPage />
             </ProtectedRoute>
           }
@@ -96,7 +96,7 @@ export const AppRoutes = () => {
         <Route
           path="/datasets"
           element={
-            <ProtectedRoute guestAllowed>
+            <ProtectedRoute requireAuth={true}>
               <DatasetList />
             </ProtectedRoute>
           }
@@ -104,7 +104,7 @@ export const AppRoutes = () => {
         <Route
           path="/datasets/:datasetId"
           element={
-            <ProtectedRoute guestAllowed>
+            <ProtectedRoute requireAuth={true}>
               <DatasetList />
             </ProtectedRoute>
           }
@@ -113,7 +113,7 @@ export const AppRoutes = () => {
         <Route
           path="/settings"
           element={
-            <ProtectedRoute requireAuth>
+            <ProtectedRoute requireAuth={true}>
               <Settings />
             </ProtectedRoute>
           }
