@@ -22,12 +22,6 @@ export const Dashboard = () => {
     }
   ]);
 
-  const handleCreateProject = () => {
-    // Implement project creation logic
-    console.log('Creating new project');
-    return <CreateProjectButton />;
-  };
-
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-6">
       <div className="flex items-center justify-between mb-8">
@@ -37,10 +31,7 @@ export const Dashboard = () => {
             Manage your machine learning projects and datasets
           </p>
         </div>
-        <Button onClick={handleCreateProject}>
-          <Plus className="mr-2 h-4 w-4" />
-          New Project
-        </Button>
+        <CreateProjectButton />
       </div>
 
       <DashboardMetrics

@@ -10,14 +10,27 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { useAuth } from "@/context/auth"
 
 export function UserNav() {
   const navigate = useNavigate()
+  const { user, isAuthenticated } = useAuth()
+
+  if (!isAuthenticated) {
+    return (
+      <div className="flex space-x-4">
+        <Link to="/login">Log in</Link>
+        <Link to="/signup">Sign up</Link>
+      </div>
+    )
+  }
 
   const handelLogout = () => {
     localStorage.removeItem('access_token')
     navigate('/')
   }
+
+  if (!user) return null
 
   return (
     <DropdownMenu>
@@ -25,16 +38,18 @@ export function UserNav() {
         <Button variant="ghost" className="relative h-8 w-8 rounded-full">
           <Avatar className="h-8 w-8">
             <AvatarImage src="/avatars/01.png" alt="@johndoe" />
-            <AvatarFallback>JD</AvatarFallback>
+            <AvatarFallback>
+              <span>{user?.username[0].toUpperCase()}</span>
+            </AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56" align="end" forceMount>
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium leading-none">John Doe</p>
+            <p className="text-sm font-medium leading-none">{user?.username}</p>
             <p className="text-xs leading-none text-muted-foreground">
-              john@example.com
+              {user?.email}
             </p>
           </div>
         </DropdownMenuLabel>
