@@ -61,11 +61,20 @@ export enum MissingValuesHandling {
   }
   
   // Data structures
-  export interface DatasetStats {
-    rows: number;
-    columns: number;
+  export interface FileStats {
+    columns: Column[];
+    data: any[];
+  }
+
+  export interface Column {
+    name: string;
+    type: string;
+    uniqueValues: number;
     missingValues: number;
-    duplicates: number;
+    min?: number;
+    max?: number;
+    mean?: number;
+    sample: any[];
   }
   
   export interface PreprocessingOptions {
@@ -89,6 +98,10 @@ export enum MissingValuesHandling {
   
   // Component props
   export interface DataPreparationSectionProps {
-    datasetStats?: DatasetStats;
+    fileStats?: FileStats;
+    fileSize?: number; // Size in MB
+    isProcessing?: boolean;
+    processedStats?: FileStats;
+    SampleSize?: number;
     onPreprocessingChange?: (options: PreprocessingOptions) => void;
   }

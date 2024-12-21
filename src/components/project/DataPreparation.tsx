@@ -29,6 +29,7 @@ import {
     DataPreparationSectionProps,
     ScalingMethod,
     } from "@/lib/types/preprocessing";
+import DataPreview from "./DataPreview";
 
 
 const DEFAULT_PREPROCESSING_OPTIONS: PreprocessingOptions = {
@@ -51,11 +52,13 @@ const DEFAULT_PREPROCESSING_OPTIONS: PreprocessingOptions = {
 };
 
 export const DataPreparationSection: React.FC<DataPreparationSectionProps> = ({
-  datasetStats,
+  fileStats,
+  fileSize,
   onPreprocessingChange,
 }) => {
   const [preprocessingOptions, setPreprocessingOptions] =
     React.useState<PreprocessingOptions>(DEFAULT_PREPROCESSING_OPTIONS);
+
 
   const handlePreprocessingChange = (
     field: keyof PreprocessingOptions,
@@ -80,8 +83,8 @@ export const DataPreparationSection: React.FC<DataPreparationSectionProps> = ({
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="grid lg:grid-cols-2 gap-6">
-          <Card>
+        <div className="grid lg:grid-cols-3 gap-6">
+          <Card >
             <CardHeader>
               <CardTitle className="text-lg">Preprocessing Pipeline</CardTitle>
             </CardHeader>
@@ -395,27 +398,20 @@ export const DataPreparationSection: React.FC<DataPreparationSectionProps> = ({
               </Accordion>
             </CardContent>
           </Card>
-          <Card>
+
+
+          <Card className="lg:col-span-2">
             <CardHeader>
               <CardTitle className="text-lg">
                 Data Preview & Statistics
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="bg-muted p-4 rounded-lg">
-                {!datasetStats ? (
-                  <p className="text-muted-foreground">No dataset selected</p>
-                ) : (
-                  <div className="grid grid-cols-2 gap-4 text-sm">
-                    <div>Rows: {datasetStats.rows}</div>
-                    <div>Columns: {datasetStats.columns}</div>
-                    <div>Missing Values: {datasetStats.missingValues}</div>
-                    <div>Duplicates: {datasetStats.duplicates}</div>
-                  </div>
-                )}
-              </div>
+              <DataPreview fileStats={fileStats} fileSize={fileSize} />
             </CardContent>
           </Card>
+
+
         </div>
       </CardContent>
     </Card>
