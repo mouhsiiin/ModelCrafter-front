@@ -105,7 +105,7 @@ const ModelConfiguration: React.FC = () => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Model Configuration</CardTitle>
+        <CardTitle>Algorithm Selection</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
@@ -135,10 +135,6 @@ const ModelConfiguration: React.FC = () => {
               </Card>
             </div>
           )}
-
-          <Button type="primary" onClick={handleEvaluate} loading={loading} disabled={!selectedModel}>
-            Evaluate Model
-          </Button>
         </div>
       </CardContent>
     </Card>

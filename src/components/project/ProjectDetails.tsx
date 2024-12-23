@@ -207,54 +207,6 @@ export const ProjectDetails = ( ) => {
     </div>
   );
 
-
-  const ModelBuildSection = () => (
-    <Card>
-      <CardHeader>
-        <CardTitle>Build Model</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="grid md:grid-cols-1 gap-4">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">Algorithm Selection</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium mb-2">Algorithm Type</label>
-                <Select onValueChange={handleAlgorithmChange}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select algorithm" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="bayesian">Naive Bayes</SelectItem>
-                    <SelectItem value="linear">Linear Regression</SelectItem>
-                    <SelectItem value="tree">Decision Tree</SelectItem>
-                    <SelectItem value="forest">Random Forest</SelectItem>
-                    <SelectItem value="svm">SVM</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-2">Parameters</label>
-                <Textarea
-                  value={jsonParameters}
-                  onChange={(e) => setJsonParameters(e.target.value)}
-                  placeholder="Algorithm parameters in JSON format"
-                  rows={6}
-                />
-              </div>
-            </CardContent>
-          </Card>
-  
-          {/* ModelConfiguration Component */}
-          <ModelConfiguration />
-        </div>
-      </CardContent>
-    </Card>
-  );
-  
-
   const EvaluationSection = () => (
     <Card>
       <CardHeader>
@@ -300,7 +252,7 @@ export const ProjectDetails = ( ) => {
       case 2:
         return <VisualizationSection columns={fileStats?.columns} projectId={projectId} />;
       case 3:
-        return <ModelBuildSection />;
+        return <ModelConfiguration />;
       case 4:
         return <EvaluationSection />;
       default:
