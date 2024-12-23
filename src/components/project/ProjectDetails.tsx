@@ -43,6 +43,30 @@ export const ProjectDetails = ( ) => {
 
   
 
+  const [selectedAlgorithm, setSelectedAlgorithm] = useState('');
+  const [jsonParameters, setJsonParameters] = useState('');
+
+  type AlgorithmParameters = {
+    bayesian: { alpha: number; fit_prior: boolean; };
+    linear: { fit_intercept: boolean; normalize: boolean; copy_X: boolean; };
+    tree: { criterion: string; max_depth: null | number; min_samples_split: number; };
+    forest: { n_estimators: number; max_features: string; };
+    svm: { kernel: string; C: number; };
+  };
+  
+  const algorithmParameters: AlgorithmParameters = {
+    bayesian: { alpha: 0.1, fit_prior: true },
+    linear: { fit_intercept: true, normalize: false, copy_X: true },
+    tree: { criterion: "gini", max_depth: null, min_samples_split: 2 },
+    forest: { n_estimators: 100, max_features: "auto" },
+    svm: { kernel: "rbf", C: 1.0 },
+  };
+  
+  const handleAlgorithmChange = (value: string) => {
+    setSelectedAlgorithm(value);
+    setJsonParameters(JSON.stringify(algorithmParameters[value as keyof AlgorithmParameters], null, 2));
+  };
+  
 
   const handelFileAccepted = async (file: File) => {
     setUploadedFile(file);
@@ -87,8 +111,6 @@ export const ProjectDetails = ( ) => {
   const handlePrevious = () => {
     setCurrentStep((prev) => Math.max(prev - 1, 0));
   };
-
-
   
   const generateProcessedStats = useCallback((currentStats: FileStats, options: PreprocessingOptions): FileStats => {
     const processedColumns = currentStats.columns.map(column => {
@@ -191,17 +213,15 @@ export const ProjectDetails = ( ) => {
         <CardTitle>Build Model</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="grid md:grid-cols-2 gap-4">
+        <div className="grid md:grid-cols-1 gap-4">
           <Card>
             <CardHeader>
               <CardTitle className="text-lg">Algorithm Selection</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <label className="block text-sm font-medium mb-2">
-                  Algorithm Type
-                </label>
-                <Select>
+                <label className="block text-sm font-medium mb-2">Algorithm Type</label>
+                <Select onValueChange={handleAlgorithmChange}>
                   <SelectTrigger>
                     <SelectValue placeholder="Select algorithm" />
                   </SelectTrigger>
@@ -215,29 +235,13 @@ export const ProjectDetails = ( ) => {
                 </Select>
               </div>
               <div>
-                <label className="block text-sm font-medium mb-2">
-                  Parameters
-                </label>
-                <Textarea placeholder="Algorithm parameters in JSON format" />
-              </div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">Training Settings</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium mb-2">
-                  Train/Test Split
-                </label>
-                <Input type="number" placeholder="80" />
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-2">
-                  Random Seed
-                </label>
-                <Input type="number" placeholder="42" />
+                <label className="block text-sm font-medium mb-2">Parameters</label>
+                <Textarea
+                  value={jsonParameters}
+                  onChange={(e) => setJsonParameters(e.target.value)}
+                  placeholder="Algorithm parameters in JSON format"
+                  rows={6}
+                />
               </div>
             </CardContent>
           </Card>
