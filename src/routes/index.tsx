@@ -80,7 +80,7 @@ export const AppRoutes = () => {
           path="/projects/:projectId"
           element={
             <ProtectedRoute requireAuth={true}>
-              <ProjectDetails />
+              <ProjectDetails  />
             </ProtectedRoute>
           }
         />

@@ -21,14 +21,16 @@ import { Stepper } from "../ui/stepper";
 
 import { DataPreparationSection } from "./DataPreparation";
 import DataUploadSection from "./UploadSection";
+import { VisualizationSection } from "./visualize/VisualizationSection";
 import { DataTable } from "./DataTable";
 import { Slider } from "../ui/slider";
 import { PreprocessingOptions ,FileStats, Column } from "@/lib/types/preprocessing";
 import { parseFile } from "@/utils/fileParser";
+import { data, useParams } from "react-router-dom";
 
 
 
-export const ProjectDetails = () => {
+export const ProjectDetails = ( ) => {
   const [currentStep, setCurrentStep] = useState(0);
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [pageSize, setPageSize] = useState<number>(20);
@@ -36,6 +38,10 @@ export const ProjectDetails = () => {
   const [fileSize, setFileSize] = useState<number>(0);
   const [processedStats, setProcessedStats] = useState<FileStats | undefined>();
   const [isProcessing, setIsProcessing] = useState(false);
+  const { projectId } = useParams<{ projectId: string }>();
+
+
+  
 
 
   const handelFileAccepted = async (file: File) => {
@@ -131,9 +137,7 @@ export const ProjectDetails = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          options,
-          currentStats: fileStats,
-          processedStats: preview
+          options
         })
       });
 
@@ -180,60 +184,6 @@ export const ProjectDetails = () => {
     </div>
   );
 
-  const VisualizationSection = () => (
-    <Card>
-      <CardHeader>
-        <CardTitle>Data Visualization</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="grid md:grid-cols-2 gap-4">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">Chart Type</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <Select>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select chart type" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="line">Line Chart</SelectItem>
-                  <SelectItem value="bar">Bar Chart</SelectItem>
-                  <SelectItem value="scatter">Scatter Plot</SelectItem>
-                  <SelectItem value="histogram">Histogram</SelectItem>
-                </SelectContent>
-              </Select>
-            </CardContent>
-
-            <CardContent className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium mb-2">
-                  Feature: X
-                </label>
-                <Input type="text" placeholder="Name a the first feature" />
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-2">
-                  Feature: Y
-                </label>
-                <Input type="text" placeholder="Name a the second feature" />
-              </div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">Preview</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground">
-                Select a chart type to preview
-              </p>
-            </CardContent>
-          </Card>
-        </div>
-      </CardContent>
-    </Card>
-  );
 
   const ModelBuildSection = () => (
     <Card>
@@ -329,7 +279,7 @@ export const ProjectDetails = () => {
   const renderCurrentSection = () => {
     switch (currentStep) {
       case 0:
-        return <DataUploadSection onFileAccepted={handelFileAccepted} />;
+        return <DataUploadSection onFileAccepted={handelFileAccepted} projectId={projectId} />;
       case 1:
         return <DataPreparationSection
           onPreprocessingChange={onPreprocessingChange}
@@ -339,13 +289,13 @@ export const ProjectDetails = () => {
           isProcessing={isProcessing}
         />;
       case 2:
-        return <VisualizationSection />;
+        return <VisualizationSection columns={fileStats?.columns} projectId={projectId} />;
       case 3:
         return <ModelBuildSection />;
       case 4:
         return <EvaluationSection />;
       default:
-        return <DataUploadSection onFileAccepted={handelFileAccepted} />; // default to upload
+        return <DataUploadSection onFileAccepted={handelFileAccepted} projectId={projectId} />;
     }
   };
   const handlePageSizeChange = ([value]: number[]) => {
