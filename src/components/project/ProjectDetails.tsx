@@ -22,6 +22,7 @@ import { Stepper } from "../ui/stepper";
 import { DataPreparationSection } from "./DataPreparation";
 import DataUploadSection from "./UploadSection";
 import { VisualizationSection } from "./visualize/VisualizationSection";
+import ModelConfiguration from "./model_config/ModelSection";
 import { DataTable } from "./DataTable";
 import { Slider } from "../ui/slider";
 import { PreprocessingOptions ,FileStats, Column } from "@/lib/types/preprocessing";
@@ -245,10 +246,14 @@ export const ProjectDetails = ( ) => {
               </div>
             </CardContent>
           </Card>
+  
+          {/* ModelConfiguration Component */}
+          <ModelConfiguration />
         </div>
       </CardContent>
     </Card>
   );
+  
 
   const EvaluationSection = () => (
     <Card>
