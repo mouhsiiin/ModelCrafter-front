@@ -8,15 +8,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Stepper } from "../ui/stepper";
 
 import { DataPreparationSection } from "./DataPreparation";
@@ -27,7 +18,7 @@ import { DataTable } from "./DataTable";
 import { Slider } from "../ui/slider";
 import { PreprocessingOptions ,FileStats, Column } from "@/lib/types/preprocessing";
 import { parseFile } from "@/utils/fileParser";
-import { data, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 
 
