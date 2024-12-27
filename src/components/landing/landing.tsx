@@ -23,7 +23,23 @@ export const LandingPage: React.FC = () => {
                 <ChevronRight className="ml-2 h-4 w-4" />
               </Button>
             </Link>
-            <Button size="lg" variant="outline" className="border-teal-400 hover:bg-teal-400/10 transition-all" style={{ color: 'black' }}>
+          </div>
+        </div>
+      </section>
+
+      {/* About Project Section */}
+      <section className="py-20 px-4 bg-gradient-to-b from-gray-800 via-gray-900 to-black">
+        <div className="container mx-auto max-w-5xl text-center">
+          <h2 className="text-4xl font-extrabold text-gradient mb-6 bg-clip-text bg-gradient-to-r from-teal-400 to-blue-500">
+            About This Platform
+          </h2>
+          <p className="text-lg text-gray-400 mb-8">
+            Our platform is crafted to empower data scientists, ML engineers, and enthusiasts.
+            By providing tools for seamless dataset management, cutting-edge ML algorithms, and intuitive visualization,
+            we help you focus on innovation and achieving impactful results.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button size="lg" className="bg-gradient-to-r from-purple-400 to-pink-500 hover:from-purple-300 hover:to-pink-400 transition-all">
               Learn More
             </Button>
           </div>
