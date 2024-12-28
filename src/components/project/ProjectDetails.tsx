@@ -31,33 +31,6 @@ export const ProjectDetails = ( ) => {
   const [processedStats, setProcessedStats] = useState<FileStats | undefined>();
   const [isProcessing, setIsProcessing] = useState(false);
   const { projectId } = useParams<{ projectId: string }>();
-
-
-  
-
-  const [selectedAlgorithm, setSelectedAlgorithm] = useState('');
-  const [jsonParameters, setJsonParameters] = useState('');
-
-  type AlgorithmParameters = {
-    bayesian: { alpha: number; fit_prior: boolean; };
-    linear: { fit_intercept: boolean; normalize: boolean; copy_X: boolean; };
-    tree: { criterion: string; max_depth: null | number; min_samples_split: number; };
-    forest: { n_estimators: number; max_features: string; };
-    svm: { kernel: string; C: number; };
-  };
-  
-  const algorithmParameters: AlgorithmParameters = {
-    bayesian: { alpha: 0.1, fit_prior: true },
-    linear: { fit_intercept: true, normalize: false, copy_X: true },
-    tree: { criterion: "gini", max_depth: null, min_samples_split: 2 },
-    forest: { n_estimators: 100, max_features: "auto" },
-    svm: { kernel: "rbf", C: 1.0 },
-  };
-  
-  const handleAlgorithmChange = (value: string) => {
-    setSelectedAlgorithm(value);
-    setJsonParameters(JSON.stringify(algorithmParameters[value as keyof AlgorithmParameters], null, 2));
-  };
   
 
   const handelFileAccepted = async (file: File) => {

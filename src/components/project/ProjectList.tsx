@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { getProjectRecent, deleteProject } from '@/services/projects';
 import { Project } from '@/lib/types/project';
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Trash2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
