@@ -3,6 +3,7 @@ import { cn } from "@/lib/utils";
 import { UserNav } from "./user-nav";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
+import { useAuth } from "@/context/auth";
 
 const NAV_ITEMS = [
   { label: "Home", path: "/" },
@@ -18,7 +19,7 @@ export function MainNav() {
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // Check if the user is authenticated
-  const isAuthenticated = localStorage.getItem("user");
+  const { isAuthenticated } = useAuth();
 
   return (
     <header className="fixed top-0 left-0 w-full bg-gradient-to-r from-black/50 to-black/20 backdrop-blur-md z-50">
@@ -31,7 +32,7 @@ export function MainNav() {
 
         {/* Navigation Links */}
         <nav className="hidden md:flex space-x-8 text-sm font-medium">
-          {isAuthenticated ? (
+          {!isAuthenticated ? (
             NAV_ITEMS.map((item) => (
               <Link
                 key={item.label}
