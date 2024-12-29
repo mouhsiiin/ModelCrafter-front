@@ -228,7 +228,7 @@ export const ProjectDetails = ( ) => {
   };
 
   return (
-    <div className="container mx-auto p-6 space-y-6 max-w-7xl">
+    <div className="container mx-auto p-6 space-y-6 max-w-7xl relative py-20 px-4">
       <header>
         <h1 className="text-3xl font-bold">ML Analysis Dashboard</h1>
       </header>
