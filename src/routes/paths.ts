@@ -8,6 +8,7 @@ export const ROUTES = {
     DASHBOARD: '/dashboard',
     PROJECTS: '/projects',
     PROJECT_DETAILS: (projectId: string) => `/projects/${projectId}`,
+    AUTO_CRAFTER: '/auto-crafter',
     SETTINGS: '/settings',
   } as const;
   

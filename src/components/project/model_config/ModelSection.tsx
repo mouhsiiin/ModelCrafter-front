@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { InputNumber, Select as AntSelect, Button } from "antd";
+import { InputNumber, Select as AntSelect } from "antd";
 
 interface ModelParameter {
   label: string;
@@ -48,7 +48,6 @@ const MODEL_PARAMETERS: Record<string, ModelParameter[]> = {
 const ModelConfiguration: React.FC = () => {
   const [selectedModel, setSelectedModel] = useState<string>("");
   const [parameters, setParameters] = useState<Record<string, any>>({});
-  const [loading, setLoading] = useState<boolean>(false);
 
   const handleModelChange = (model: string) => {
     setSelectedModel(model);
@@ -61,22 +60,6 @@ const ModelConfiguration: React.FC = () => {
 
   const handleParameterChange = (label: string, value: any) => {
     setParameters((prev) => ({ ...prev, [label]: value }));
-  };
-
-  const handleEvaluate = async () => {
-    if (!selectedModel) return;
-    setLoading(true);
-
-    try {
-      // Replace this with the actual evaluation logic
-      console.log("Evaluating model:", selectedModel, "with parameters:", parameters);
-      alert("Model evaluated successfully!");
-    } catch (error) {
-      console.error("Evaluation error:", error);
-      alert("Error during evaluation.");
-    } finally {
-      setLoading(false);
-    }
   };
 
   const renderParameters = () => {

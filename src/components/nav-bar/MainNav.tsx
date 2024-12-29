@@ -7,14 +7,18 @@ import { Menu, X } from "lucide-react";
 const NAV_ITEMS = [
   { label: "Home", path: "/" },
   { label: "Features", path: "/features" },
-  { label: "Pricing", path: "/pricing" },
   { label: "About", path: "/about" },
+  { label: "Signup", path: "/signup", isPrivate: false },
+  { label: "Login", path: "/login", isPrivate: false },
 ];
 
 export function MainNav() {
   const location = useLocation();
   const pathname = location.pathname;
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  // Check if the user is authenticated
+  const isAuthenticated = localStorage.getItem("user");
 
   return (
     <header className="fixed top-0 left-0 w-full bg-gradient-to-r from-black/50 to-black/20 backdrop-blur-md z-50">
@@ -27,26 +31,49 @@ export function MainNav() {
 
         {/* Navigation Links */}
         <nav className="hidden md:flex space-x-8 text-sm font-medium">
-          {NAV_ITEMS.map((item) => (
-            <Link
-              key={item.path}
-              to={item.path}
-              className={cn(
-                "text-white relative group",
-                pathname === item.path
-                  ? "font-semibold"
-                  : "text-white/70 hover:text-white"
-              )}
-            >
-              {item.label}
-              <span
+          {isAuthenticated ? (
+            NAV_ITEMS.map((item) => (
+              <Link
+                key={item.label}
+                to={item.path}
                 className={cn(
-                  "absolute bottom-0 left-0 w-0 h-0.5 bg-white transition-all group-hover:w-full",
-                  pathname === item.path && "w-full"
+                  "text-white group",
+                  "hover:text-secondary",
+                  pathname === item.path && "text-secondary"
                 )}
-              ></span>
-            </Link>
-          ))}
+              >
+                {item.label == "Signup" || item.label == "Login" ? (
+                  <span className="text-black bg-blue-400 px-3 py-1 rounded-md hover:bg-blue-500 transition-colors duration-200">
+                    {item.label}
+                  </span>
+                ) : (
+                  <span>{item.label}</span>
+                )}
+              </Link>
+            ))
+            
+          ) : (
+            <>
+              <Link to="/dashboard" className="text-white relative group">
+                Dashboard
+                <span
+                  className={cn(
+                    "absolute bottom-0 left-0 w-0 h-0.5 bg-white transition-all group-hover:w-full",
+                    pathname === "/dashboard" && "w-full"
+                  )}
+                ></span>
+              </Link>
+              <Link to="/logout" className="text-black bg-blue-100 px-3 py-1 rounded-md hover:bg-red-500 transition-colors duration-200">
+                Logout
+                <span
+                  className={cn(
+                    "absolute bottom-0 left-0 w-0 h-0.5 bg-white transition-all group-hover:w-full",
+                    pathname === "/logout" && "w-full"
+                  )}
+                ></span>
+              </Link>
+            </>
+          )}
         </nav>
 
         {/* User Navigation */}
@@ -62,26 +89,6 @@ export function MainNav() {
           {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
         </button>
       </div>
-
-      {/* Mobile Menu */}
-      {isMobileMenuOpen && (
-        <div className="md:hidden bg-black/80 text-white">
-          <nav className="flex flex-col space-y-4 p-4">
-            {NAV_ITEMS.map((item) => (
-              <Link
-                key={item.path}
-                to={item.path}
-                className={cn(
-                  "text-white/70 hover:text-white font-medium",
-                  pathname === item.path && "font-semibold text-white"
-                )}
-              >
-                {item.label}
-              </Link>
-            ))}
-          </nav>
-        </div>
-      )}
     </header>
   );
 }

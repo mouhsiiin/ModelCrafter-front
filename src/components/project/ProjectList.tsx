@@ -4,7 +4,6 @@ import { getProjectRecent, deleteProject } from '@/services/projects';
 import { Project } from '@/lib/types/project';
 import { useToast } from "@/hooks/use-toast";
 import { Loader2 } from "lucide-react";
-
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import {
@@ -125,6 +124,11 @@ export function ProjectList() {
             <TableCell className="px-4 py-2">{project.created_at.toLocaleString()}</TableCell>
             <TableCell className="px-4 py-2 text-right">
               <div className="flex space-x-2 justify-end">
+                <Button asChild size="sm">
+                  <Link to={`/auto_crafter`}>
+                    AutoMCrafter
+                  </Link>
+                </Button>
                 <Button asChild size="sm">
                   <Link to={`/projects/${project.id}`}>
                     Open
