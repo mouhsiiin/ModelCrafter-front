@@ -214,9 +214,14 @@ export const Dashboard = () => {
                   </TableCell>
                   <TableCell>{project.created_at.toLocaleString()}</TableCell>
                   <TableCell className="text-right space-x-2">
+                    <Button asChild size="sm">
+                      <Link to={`/auto_crafter`}>
+                        AutoMCrafter
+                      </Link>
+                    </Button>
                     <Link to={`/projects/${project.id}`}>
-                      <Button size="sm" variant="ghost">
-                        Open
+                      <Button size="sm">
+                        Custom
                       </Button>
                     </Link>
                     <AlertDialog>

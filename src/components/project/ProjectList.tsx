@@ -129,11 +129,11 @@ export function ProjectList() {
                     AutoMCrafter
                   </Link>
                 </Button>
-                <Button asChild size="sm">
-                  <Link to={`/projects/${project.id}`}>
-                    Open
-                  </Link>
-                </Button>
+                <Link to={`/projects/${project.id}`}>
+                  <Button size="sm">
+                    Custom
+                  </Button>
+                </Link>
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
                     <Button 
