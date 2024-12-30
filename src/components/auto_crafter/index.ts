@@ -1,1 +1,1 @@
-export { default as DataUploadSection } from './DataUploadSection';
+export { default as AutoCrafter } from './AutoCrafter';

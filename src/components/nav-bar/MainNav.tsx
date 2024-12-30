@@ -64,15 +64,6 @@ export function MainNav() {
                   )}
                 ></span>
               </Link>
-              <Link to="/logout" className="text-black bg-blue-100 px-3 py-1 rounded-md hover:bg-red-500 transition-colors duration-200">
-                Logout
-                <span
-                  className={cn(
-                    "absolute bottom-0 left-0 w-0 h-0.5 bg-white transition-all group-hover:w-full",
-                    pathname === "/logout" && "w-full"
-                  )}
-                ></span>
-              </Link>
             </>
           )}
         </nav>

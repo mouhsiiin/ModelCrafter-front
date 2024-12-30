@@ -1,7 +1,7 @@
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { Login, SignUp, GuestAccess } from '@/components/auth';
 import { Dashboard } from '@/components/dashboard';
-import { DataUploadSection, ProjectDetails } from '@/components/project';
+import { ProjectDetails } from '@/components/project';
 import { DatasetList } from '@/components/dataset';
 import { Settings } from '@/components/settings';
 import { ProtectedRoute } from './ProtectedRoute';
@@ -9,6 +9,7 @@ import { MainNav } from '@/components/nav-bar/MainNav';
 import { LandingPage } from '@/components/landing';
 import { ProjectsPage } from '@/pages/projects';
 import { useAuth } from '@/context/auth';
+import { AutoCrafter } from '@/components/auto_crafter';
 
 // Main Routes Component
 export const AppRoutes = () => {
@@ -117,7 +118,7 @@ export const AppRoutes = () => {
           path="/auto_crafter"
           element={
             <ProtectedRoute requireAuth={true}>
-              <DataUploadSection />
+              <AutoCrafter />
             </ProtectedRoute>
           }
         />
