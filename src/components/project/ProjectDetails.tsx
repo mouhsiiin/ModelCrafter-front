@@ -19,6 +19,7 @@ import { Slider } from "../ui/slider";
 import { PreprocessingOptions ,FileStats, Column } from "@/lib/types/preprocessing";
 import { parseFile } from "@/utils/fileParser";
 import { useParams } from "react-router-dom";
+import api from "@/services/api";
 
 
 
@@ -31,7 +32,6 @@ export const ProjectDetails = ( ) => {
   const [processedStats, setProcessedStats] = useState<FileStats | undefined>();
   const [isProcessing, setIsProcessing] = useState(false);
   const { projectId } = useParams<{ projectId: string }>();
-  
 
   const handelFileAccepted = async (file: File) => {
     setUploadedFile(file);
@@ -104,11 +104,21 @@ export const ProjectDetails = ( ) => {
 
     return {
       columns: processedColumns,
-      data: currentStats.data.slice(0, Math.min(pageSize, expectedDataLength)) // Preview sample
+      data: currentStats.data
     };
   }, [pageSize]);
 
   const onPreprocessingChange = async (options: PreprocessingOptions) => {
+    if (!fileStats) return;
+
+    setIsProcessing(true);
+    
+    setIsProcessing(false);
+
+  };
+
+
+  const onPreprocessingApply = async (options: PreprocessingOptions) => {
     if (!fileStats) return;
 
     setIsProcessing(true);
@@ -118,25 +128,22 @@ export const ProjectDetails = ( ) => {
       setProcessedStats(preview);
 
       // Send configuration to backend
-      const response = await fetch('/api/preprocessing/configure', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
+      const response = await api.post(`/preprocessing/process/${projectId}`, {
+        options: options,
+        preview_stats: {
+          columns: preview.columns
         },
-        body: JSON.stringify({
-          options
-        })
-      });
+      }); 
 
-      if (!response.ok) {
-        throw new Error('Failed to configure preprocessing');
+      if (response.status === 200) {
+        throw new Error('Failed to apply preprocessing');
       }
     } catch (error) {
       console.error('Error in preprocessing:', error);
     } finally {
       setIsProcessing(false);
     }
-  };
+  }
 
   const Navigation = () => (
     <div className="w-full">
@@ -208,6 +215,7 @@ export const ProjectDetails = ( ) => {
       case 1:
         return <DataPreparationSection
           onPreprocessingChange={onPreprocessingChange}
+          onPreprocessingApply={onPreprocessingApply}
           fileStats = {fileStats}
           fileSize={fileSize}
           processedStats={processedStats}

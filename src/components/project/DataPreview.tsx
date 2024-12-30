@@ -56,19 +56,14 @@ export const DataPreview: React.FC<DataPreparationSectionProps> = ({
                 <h3 className="font-semibold">After Processing</h3>
                 <div className="grid grid-cols-3 gap-4">
                   <div className="p-4 border rounded">
-                    <div className="text-sm text-gray-500">Expected Rows</div>
+                    <div className="text-sm text-gray-500">Total Rows</div>
                     <div className="text-2xl font-bold">{processedData.length}</div>
                   </div>
                   <div className="p-4 border rounded">
                     <div className="text-sm text-gray-500">Total Columns</div>
                     <div className="text-2xl font-bold">{processedColumns.length}</div>
                   </div>
-                  <div className="p-4 border rounded">
-                    <div className="text-sm text-gray-500">Changes</div>
-                    <div className="text-2xl font-bold">
-                      {originalData.length - processedData.length}
-                    </div>
-                  </div>
+                  
                 </div>
               </div>
             )}

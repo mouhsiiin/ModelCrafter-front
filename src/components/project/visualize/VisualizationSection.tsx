@@ -44,7 +44,6 @@ const Base64Image: React.FC<Base64ImageProps> = ({
   altText = "Preview image",
   className = "",
 }) => {
-  console.log(base64String);
   if (!base64String) {
     return (
       <div className="flex items-center justify-center h-48 bg-slate-100 rounded-md">

@@ -18,6 +18,7 @@ import {
 import { Slider } from "@/components/ui/slider";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 
 import {
     DataSplitRatio,
@@ -53,8 +54,10 @@ const DEFAULT_PREPROCESSING_OPTIONS: PreprocessingOptions = {
 
 export const DataPreparationSection: React.FC<DataPreparationSectionProps> = ({
   fileStats,
+  processedStats,
   fileSize,
   onPreprocessingChange,
+  onPreprocessingApply,
 }) => {
   const [preprocessingOptions, setPreprocessingOptions] =
     React.useState<PreprocessingOptions>(DEFAULT_PREPROCESSING_OPTIONS);
@@ -71,6 +74,11 @@ export const DataPreparationSection: React.FC<DataPreparationSectionProps> = ({
     setPreprocessingOptions(newOptions);
     onPreprocessingChange?.(newOptions);
   };
+
+
+  const applyPreprocessing = () => {
+    onPreprocessingApply?.(preprocessingOptions);
+  }
 
   return (
     <Card className="w-full">
@@ -397,6 +405,11 @@ export const DataPreparationSection: React.FC<DataPreparationSectionProps> = ({
                 </AccordionItem>
               </Accordion>
             </CardContent>
+            <CardHeader>
+              <div className="flex justify-end">
+                <Button onClick={applyPreprocessing}>Apply</Button>
+              </div>
+            </CardHeader>
           </Card>
 
 
@@ -407,7 +420,7 @@ export const DataPreparationSection: React.FC<DataPreparationSectionProps> = ({
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <DataPreview fileStats={fileStats} fileSize={fileSize} />
+              <DataPreview fileStats={fileStats} fileSize={fileSize} processedStats={processedStats} />
             </CardContent>
           </Card>
 

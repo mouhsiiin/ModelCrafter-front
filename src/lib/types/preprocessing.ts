@@ -104,4 +104,5 @@ export enum MissingValuesHandling {
     processedStats?: FileStats;
     SampleSize?: number;
     onPreprocessingChange?: (options: PreprocessingOptions) => void;
+    onPreprocessingApply?: (options: PreprocessingOptions) => void;
   }
