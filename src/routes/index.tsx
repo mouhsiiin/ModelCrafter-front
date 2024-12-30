@@ -9,6 +9,7 @@ import { MainNav } from '@/components/nav-bar/MainNav';
 import { LandingPage } from '@/components/landing';
 import { ProjectsPage } from '@/pages/projects';
 import { useAuth } from '@/context/auth';
+import { AutoCrafter } from '@/components/auto_crafter';
 
 // Main Routes Component
 export const AppRoutes = () => {
@@ -111,6 +112,17 @@ export const AppRoutes = () => {
             </ProtectedRoute>
           }
         />
+
+        {/* Auto Crafter Route */}
+        <Route
+          path="/auto_crafter"
+          element={
+            <ProtectedRoute requireAuth={true}>
+              <AutoCrafter />
+            </ProtectedRoute>
+          }
+        />
+
         {/* Settings Route */}
         <Route
           path="/settings"

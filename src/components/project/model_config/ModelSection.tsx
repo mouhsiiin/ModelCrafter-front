@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { InputNumber, Select as AntSelect } from "antd";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -107,6 +108,7 @@ const ModelConfiguration: React.FC = () => {
   const handleParameterChange = (label: string, value: any) => {
     setParameters((prev) => ({ ...prev, [label]: value }));
   };
+
 
   const handleTrain = async () => {
     if (!selectedModel) return;

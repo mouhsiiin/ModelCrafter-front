@@ -113,7 +113,7 @@ export const Dashboard = () => {
   };
 
   return (
-    <div className="p-6 max-w-7xl mx-auto space-y-6">
+    <div className="p-6 max-w-7xl mx-auto space-y-6 relative py-20 px-4">
       <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="text-3xl font-bold">Dashboard</h1>
@@ -214,9 +214,14 @@ export const Dashboard = () => {
                   </TableCell>
                   <TableCell>{project.created_at.toLocaleString()}</TableCell>
                   <TableCell className="text-right space-x-2">
+                    <Button asChild size="sm">
+                      <Link to={`/auto_crafter`}>
+                        AutoMCrafter
+                      </Link>
+                    </Button>
                     <Link to={`/projects/${project.id}`}>
-                      <Button size="sm" variant="ghost">
-                        Open
+                      <Button size="sm">
+                        Custom
                       </Button>
                     </Link>
                     <AlertDialog>

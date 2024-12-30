@@ -9,7 +9,6 @@ export const DataPreview: React.FC<DataPreparationSectionProps> = ({
   processedStats,
   fileSize = 0, 
   SampleSize = 5,
-  isProcessing = false
 }) => {
   if (!fileStats || fileStats.columns.length === 0) {
     return (

@@ -3,8 +3,7 @@ import { Link } from "react-router-dom";
 import { getProjectRecent, deleteProject } from '@/services/projects';
 import { Project } from '@/lib/types/project';
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Trash2 } from "lucide-react";
-
+import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import {
@@ -126,10 +125,15 @@ export function ProjectList() {
             <TableCell className="px-4 py-2 text-right">
               <div className="flex space-x-2 justify-end">
                 <Button asChild size="sm">
-                  <Link to={`/projects/${project.id}`}>
-                    Open
+                  <Link to={`/auto_crafter`}>
+                    AutoMCrafter
                   </Link>
                 </Button>
+                <Link to={`/projects/${project.id}`}>
+                  <Button size="sm">
+                    Custom
+                  </Button>
+                </Link>
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
                     <Button 

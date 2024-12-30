@@ -50,7 +50,7 @@ export function DatasetList(): JSX.Element {
   };
 
   return (
-    <div className="p-6">
+    <div className="p-6 max-w-7xl mx-auto space-y-6 relative py-20 px-4 text-center">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">Datasets</h1>
         <Button asChild>
