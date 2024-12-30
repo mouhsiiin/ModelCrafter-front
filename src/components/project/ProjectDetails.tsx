@@ -8,15 +8,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Stepper } from "../ui/stepper";
 
 import { DataPreparationSection } from "./DataPreparation";
@@ -27,7 +18,8 @@ import { DataTable } from "./DataTable";
 import { Slider } from "../ui/slider";
 import { PreprocessingOptions ,FileStats, Column } from "@/lib/types/preprocessing";
 import { parseFile } from "@/utils/fileParser";
-import { data, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import api from "@/services/api";
 
 
 
@@ -42,32 +34,6 @@ export const ProjectDetails = ( ) => {
   const { projectId } = useParams<{ projectId: string }>();
 
 
-  
-
-  const [selectedAlgorithm, setSelectedAlgorithm] = useState('');
-  const [jsonParameters, setJsonParameters] = useState('');
-
-  type AlgorithmParameters = {
-    bayesian: { alpha: number; fit_prior: boolean; };
-    linear: { fit_intercept: boolean; normalize: boolean; copy_X: boolean; };
-    tree: { criterion: string; max_depth: null | number; min_samples_split: number; };
-    forest: { n_estimators: number; max_features: string; };
-    svm: { kernel: string; C: number; };
-  };
-  
-  const algorithmParameters: AlgorithmParameters = {
-    bayesian: { alpha: 0.1, fit_prior: true },
-    linear: { fit_intercept: true, normalize: false, copy_X: true },
-    tree: { criterion: "gini", max_depth: null, min_samples_split: 2 },
-    forest: { n_estimators: 100, max_features: "auto" },
-    svm: { kernel: "rbf", C: 1.0 },
-  };
-  
-  const handleAlgorithmChange = (value: string) => {
-    setSelectedAlgorithm(value);
-    setJsonParameters(JSON.stringify(algorithmParameters[value as keyof AlgorithmParameters], null, 2));
-  };
-  
 
   const handelFileAccepted = async (file: File) => {
     setUploadedFile(file);
@@ -140,11 +106,21 @@ export const ProjectDetails = ( ) => {
 
     return {
       columns: processedColumns,
-      data: currentStats.data.slice(0, Math.min(pageSize, expectedDataLength)) // Preview sample
+      data: currentStats.data
     };
   }, [pageSize]);
 
   const onPreprocessingChange = async (options: PreprocessingOptions) => {
+    if (!fileStats) return;
+
+    setIsProcessing(true);
+    
+    setIsProcessing(false);
+
+  };
+
+
+  const onPreprocessingApply = async (options: PreprocessingOptions) => {
     if (!fileStats) return;
 
     setIsProcessing(true);
@@ -154,25 +130,22 @@ export const ProjectDetails = ( ) => {
       setProcessedStats(preview);
 
       // Send configuration to backend
-      const response = await fetch('/api/preprocessing/configure', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
+      const response = await api.post(`/preprocessing/process/${projectId}`, {
+        options: options,
+        preview_stats: {
+          columns: preview.columns
         },
-        body: JSON.stringify({
-          options
-        })
-      });
+      }); 
 
-      if (!response.ok) {
-        throw new Error('Failed to configure preprocessing');
+      if (response.status === 200) {
+        throw new Error('Failed to apply preprocessing');
       }
     } catch (error) {
       console.error('Error in preprocessing:', error);
     } finally {
       setIsProcessing(false);
     }
-  };
+  }
 
   const Navigation = () => (
     <div className="w-full">
@@ -244,6 +217,7 @@ export const ProjectDetails = ( ) => {
       case 1:
         return <DataPreparationSection
           onPreprocessingChange={onPreprocessingChange}
+          onPreprocessingApply={onPreprocessingApply}
           fileStats = {fileStats}
           fileSize={fileSize}
           processedStats={processedStats}
