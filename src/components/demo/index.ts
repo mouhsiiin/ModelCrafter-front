@@ -1,0 +1,1 @@
+export {default as VedioPage} from './VedioPage';
