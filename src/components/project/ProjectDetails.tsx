@@ -13,6 +13,7 @@ import { Stepper } from "../ui/stepper";
 import { DataPreparationSection } from "./DataPreparation";
 import DataUploadSection from "./UploadSection";
 import { VisualizationSection } from "./visualize/VisualizationSection";
+import EvaluationSection from "./EvaluationSection";
 import ModelConfiguration from "./model_config/ModelSection";
 import { DataTable } from "./DataTable";
 import { Slider } from "../ui/slider";
@@ -70,6 +71,12 @@ export const ProjectDetails = ( ) => {
   ];
 
   const handleNext = () => {
+
+    // if in the last step, redirect to dashboard
+    if (currentStep === steps.length - 1) {
+      window.location.href = "/dashboard";
+    }
+
     setCurrentStep((prev) => Math.min(prev + 1, steps.length - 1));
   };
 
@@ -169,7 +176,6 @@ export const ProjectDetails = ( ) => {
           </Button>
           <Button
             onClick={handleNext}
-            disabled={currentStep === steps.length - 1}
           >
             {currentStep === steps.length - 1 ? "Finish" : "Next"}
           </Button>
@@ -178,35 +184,7 @@ export const ProjectDetails = ( ) => {
     </div>
   );
 
-  const EvaluationSection = () => (
-    <Card>
-      <CardHeader>
-        <CardTitle>Model Evaluation</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="grid md:grid-cols-2 gap-4">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">Metrics</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground">No evaluation results yet</p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">Visualization</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground">
-                Train model to see results
-              </p>
-            </CardContent>
-          </Card>
-        </div>
-      </CardContent>
-    </Card>
-  );
+
 
   const renderCurrentSection = () => {
     switch (currentStep) {
@@ -226,7 +204,7 @@ export const ProjectDetails = ( ) => {
       case 3:
         return <ModelConfiguration />;
       case 4:
-        return <EvaluationSection />;
+        return <EvaluationSection projectId={projectId ? projectId : ""} />;
       default:
         return <DataUploadSection onFileAccepted={handelFileAccepted} projectId={projectId} />;
     }

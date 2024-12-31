@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { InputNumber, Select as AntSelect } from "antd";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Brain, Timer, AlertCircle } from "lucide-react";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
+import api from "@/services/api";
+import { trainModel } from "@/services/models";
 
 interface ModelParameter {
   label: string;
@@ -15,78 +19,109 @@ interface ModelParameter {
 }
 
 const MODEL_PARAMETERS: Record<string, ModelParameter[]> = {
-  SVM: [
-    { label: "C", type: "number", defaultValue: 1 },
-    {
-      label: "Kernel",
-      type: "select",
-      options: [
-        { label: "Linear", value: "linear" },
-        { label: "Polynomial", value: "poly" },
-        { label: "RBF", value: "rbf" },
-        { label: "Sigmoid", value: "sigmoid" },
-      ],
-      defaultValue: "rbf",
-    },
-    { label: "Gamma", type: "number", defaultValue: 0.1 },
+  // Regression Models
+  linear_regression: [
+    { label: "fit_intercept", type: "select", options: [
+      { label: "True", value: "true" },
+      { label: "False", value: "false" }
+    ], defaultValue: "true" }
   ],
-  RandomForest: [
-    { label: "Number of Trees", type: "number", defaultValue: 100 },
-    { label: "Max Depth", type: "number", defaultValue: null },
-    { label: "Min Samples Split", type: "number", defaultValue: 2 },
-    { label: "Min Samples Leaf", type: "number", defaultValue: 1 },
+  ridge_regression: [
+    { label: "alpha", type: "number", defaultValue: 1.0 },
+    { label: "fit_intercept", type: "select", options: [
+      { label: "True", value: "true" },
+      { label: "False", value: "false" }
+    ], defaultValue: "true" }
   ],
-  LogisticRegression: [
-    { label: "C", type: "number", defaultValue: 1 },
-    {
-      label: "Solver",
-      type: "select",
-      options: [
-        { label: "LBFGS", value: "lbfgs" },
-        { label: "Saga", value: "saga" },
-        { label: "Liblinear", value: "liblinear" },
-      ],
-      defaultValue: "lbfgs",
-    },
-    { label: "Max Iterations", type: "number", defaultValue: 100 },
+  lasso_regression: [
+    { label: "alpha", type: "number", defaultValue: 1.0 },
+    { label: "max_iter", type: "number", defaultValue: 1000 }
   ],
-  XGBoost: [
-    { label: "Learning Rate", type: "number", defaultValue: 0.1 },
-    { label: "Max Depth", type: "number", defaultValue: 6 },
-    { label: "Number of Estimators", type: "number", defaultValue: 100 },
-    { label: "Subsample", type: "number", defaultValue: 1.0 },
+  decision_tree_regressor: [
+    { label: "max_depth", type: "number", defaultValue: null },
+    { label: "min_samples_split", type: "number", defaultValue: 2 },
+    { label: "min_samples_leaf", type: "number", defaultValue: 1 }
   ],
-  NeuralNetwork: [
-    { label: "Hidden Layer Sizes", type: "number", defaultValue: 100 },
-    { label: "Learning Rate", type: "number", defaultValue: 0.001 },
-    {
-      label: "Activation",
-      type: "select",
-      options: [
-        { label: "ReLU", value: "relu" },
-        { label: "Tanh", value: "tanh" },
-        { label: "Sigmoid", value: "sigmoid" },
-      ],
-      defaultValue: "relu",
-    },
-    { label: "Max Iterations", type: "number", defaultValue: 200 },
+  random_forest_regressor: [
+    { label: "n_estimators", type: "number", defaultValue: 100 },
+    { label: "max_depth", type: "number", defaultValue: null },
+    { label: "min_samples_split", type: "number", defaultValue: 2 }
   ],
+  svr: [
+    { label: "C", type: "number", defaultValue: 1.0 },
+    { label: "kernel", type: "select", options: [
+      { label: "Linear", value: "linear" },
+      { label: "RBF", value: "rbf" },
+      { label: "Polynomial", value: "poly" }
+    ], defaultValue: "rbf" },
+    { label: "gamma", type: "number", defaultValue: 0.1 }
+  ],
+  
+  // Classification Models
+  logistic_regression: [
+    { label: "C", type: "number", defaultValue: 1.0 },
+    { label: "max_iter", type: "number", defaultValue: 100 },
+    { label: "solver", type: "select", options: [
+      { label: "LBFGS", value: "lbfgs" },
+      { label: "Liblinear", value: "liblinear" },
+      { label: "Newton-CG", value: "newton-cg" }
+    ], defaultValue: "lbfgs" }
+  ],
+  decision_tree_classifier: [
+    { label: "max_depth", type: "number", defaultValue: null },
+    { label: "min_samples_split", type: "number", defaultValue: 2 },
+    { label: "min_samples_leaf", type: "number", defaultValue: 1 }
+  ],
+  random_forest_classifier: [
+    { label: "n_estimators", type: "number", defaultValue: 100 },
+    { label: "max_depth", type: "number", defaultValue: null },
+    { label: "min_samples_split", type: "number", defaultValue: 2 }
+  ],
+  svc: [
+    { label: "C", type: "number", defaultValue: 1.0 },
+    { label: "kernel", type: "select", options: [
+      { label: "Linear", value: "linear" },
+      { label: "RBF", value: "rbf" },
+      { label: "Polynomial", value: "poly" }
+    ], defaultValue: "rbf" },
+    { label: "gamma", type: "number", defaultValue: 0.1 }
+  ]
 };
 
 const ModelConfiguration: React.FC = () => {
+  const { projectId } = useParams();
   const [selectedModel, setSelectedModel] = useState<string>("");
   const [parameters, setParameters] = useState<Record<string, any>>({});
+  const [targetColumn, setTargetColumn] = useState<string>("");
+  const [testSize, setTestSize] = useState<number>(0.2);
+  const [scaleFeatures, setScaleFeatures] = useState<boolean>(true);
   const [isTraining, setIsTraining] = useState<boolean>(false);
   const [trainingTime, setTrainingTime] = useState<number>(0);
   const [error, setError] = useState<string>("");
   const [progress, setProgress] = useState<number>(0);
+  const [columns, setColumns] = useState<string[]>([]); // Available columns for target selection
+
+  useEffect(() => {
+    // Fetch available columns for the project
+    const fetchColumns = async () => {
+      try {
+        const response = await api.get(`/projects/columns/${projectId}`);
+        setColumns(response.data);
+      } catch (error) {
+        setError('Failed to load columns');
+      }
+    };
+    
+    if (projectId) {
+      fetchColumns();
+    }
+  }, [projectId]);
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
     if (isTraining) {
       interval = setInterval(() => {
         setTrainingTime((prev) => prev + 1);
-        // Simulate progress (in real implementation, this would come from backend)
         setProgress((prev) => Math.min(prev + 2, 99));
       }, 1000);
     }
@@ -109,41 +144,33 @@ const ModelConfiguration: React.FC = () => {
     setParameters((prev) => ({ ...prev, [label]: value }));
   };
 
-
   const handleTrain = async () => {
-    if (!selectedModel) return;
+    if (!selectedModel || !targetColumn || !projectId) return;
+    
     setIsTraining(true);
     setError("");
     setProgress(0);
     setTrainingTime(0);
 
+
+    
     try {
-      // Replace with actual API call
-      const response = await fetch('/api/train', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          model: selectedModel,
-          parameters: parameters,
-        }),
+      const response = await trainModel({
+        projectId,
+        selectedModel,
+        targetColumn,
+        parameters,
+        testSize,
+        scaleFeatures
       });
 
-      if (!response.ok) {
-        throw new Error('Training failed');
-      }
-
-      // Simulate training completion after 10 seconds
-      setTimeout(() => {
-        setIsTraining(false);
-        setProgress(100);
-      }, 10000);
-
+      setProgress(100);
+      // Handle success response
     } catch (error) {
       setError(error instanceof Error ? error.message : 'An error occurred');
-      setIsTraining(false);
       setProgress(0);
+    } finally {
+      setIsTraining(false);
     }
   };
 
@@ -196,6 +223,7 @@ const ModelConfiguration: React.FC = () => {
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-6 pt-6">
+          {/* Model Selection */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Select Model
@@ -207,11 +235,56 @@ const ModelConfiguration: React.FC = () => {
               <SelectContent>
                 {Object.keys(MODEL_PARAMETERS).map((model) => (
                   <SelectItem key={model} value={model}>
-                    {model}
+                    {model.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
+          </div>
+
+          {/* Target Column Selection */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Target Column
+            </label>
+            <Select value={targetColumn} onValueChange={setTargetColumn}>
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Select target column" />
+              </SelectTrigger>
+              <SelectContent>
+                {columns.map((column) => (
+                  <SelectItem key={column} value={column}>
+                    {column}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* Test Size Input */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Test Size (0-1)
+            </label>
+            <input
+              type="number"
+              value={testSize}
+              onChange={(e) => setTestSize(parseFloat(e.target.value))}
+              min="0"
+              max="1"
+              step="0.1"
+              className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+
+          {/* Scale Features Toggle */}
+          <div className="flex items-center space-x-2">
+            <Switch
+              id="scale-features"
+              checked={scaleFeatures}
+              onCheckedChange={setScaleFeatures}
+            />
+            <Label htmlFor="scale-features">Scale Features</Label>
           </div>
 
           {selectedModel && (
@@ -219,7 +292,7 @@ const ModelConfiguration: React.FC = () => {
               <Card>
                 <CardHeader className="bg-gray-50 border-b">
                   <CardTitle className="text-lg">
-                    {selectedModel} Parameters
+                    Model Parameters
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="pt-6">
@@ -247,7 +320,7 @@ const ModelConfiguration: React.FC = () => {
 
                 <Button
                   onClick={handleTrain}
-                  disabled={isTraining}
+                  disabled={isTraining || !targetColumn}
                   className="w-full"
                 >
                   {isTraining ? 'Training...' : 'Train Model'}
