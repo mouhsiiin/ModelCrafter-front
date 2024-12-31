@@ -10,6 +10,7 @@ import { LandingPage } from '@/components/landing';
 import { ProjectsPage } from '@/pages/projects';
 import { useAuth } from '@/context/auth';
 import { AutoCrafter } from '@/components/auto_crafter';
+import { VedioPage } from '@/components/demo';
 
 // Main Routes Component
 export const AppRoutes = () => {
@@ -54,6 +55,15 @@ export const AppRoutes = () => {
           element={
             <ProtectedRoute requireAuth={false}>
               <GuestAccess />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/demo"
+          element={
+            <ProtectedRoute requireAuth={false}>
+              <VedioPage />
             </ProtectedRoute>
           }
         />

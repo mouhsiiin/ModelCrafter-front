@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ChevronRight, BarChart3, Database, Brain, Lock } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { VedioPage } from '../demo';
 
 export const LandingPage: React.FC = () => {
   return (
@@ -43,6 +44,13 @@ export const LandingPage: React.FC = () => {
               Learn More
             </Button>
           </div>
+        </div>
+      </section>
+
+      {/* Demo Section */}
+      <section className="py-20 px-4 bg-gradient-to-b from-gray-800 via-gray-900 to-black">
+        <div className="container mx-auto max-w-5xl text-center">
+          <VedioPage />
         </div>
       </section>
 
@@ -117,7 +125,9 @@ export const LandingPage: React.FC = () => {
                   </Button>
                 </Link>
                 <Button size="lg" variant="outline" className="border-teal-400 hover:bg-teal-400/10 transition-all">
+                  <Link to="/demo">
                   View Demo
+                  </Link>
                 </Button>
               </div>
             </div>
