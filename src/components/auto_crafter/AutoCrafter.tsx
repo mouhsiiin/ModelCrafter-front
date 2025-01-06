@@ -8,6 +8,7 @@ import { Column } from "@/lib/types/preprocessing";
 import { Line } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
 import { VisualizationSection } from "../project/visualize";
+import { ReportDialog } from ".";
 
 // Register Chart.js components
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
@@ -79,33 +80,6 @@ const AutoCrafter: React.FC = () => {
       setUploading(false);
       setUploadProgress(0);
     }
-  };
-
-  const downloadReport = () => {
-    if (!response) {
-      setStatus("No data to generate report.");
-      return;
-    }
-
-    const report = [
-      "Analysis Report",
-      "==============",
-      "",
-      "Generated on: " + new Date().toLocaleString(),
-      "",
-      "Results:",
-      JSON.stringify(response, null, 2)
-    ].join("\n");
-
-    const blob = new Blob([report], { type: "text/plain" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = "analysis-report.txt";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
   };
 
   // Visualization function (Line chart)
@@ -255,12 +229,10 @@ const AutoCrafter: React.FC = () => {
 
               {response && (
                 <Button
-                  onClick={downloadReport}
                   variant="outline"
                   className="w-32"
                 >
-                  <Download className="h-4 w-4 mr-2" />
-                  Report
+                  <ReportDialog />
                 </Button>
               )}
             </div>
