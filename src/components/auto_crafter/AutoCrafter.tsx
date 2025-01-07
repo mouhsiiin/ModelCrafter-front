@@ -4,10 +4,8 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { Column } from "@/lib/types/preprocessing";
 import { Line } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
-import { VisualizationSection } from "../project/visualize";
 import { ReportDialog } from ".";
 
 // Register Chart.js components
@@ -107,7 +105,6 @@ const AutoCrafter: React.FC = () => {
             <CardTitle>Data Analysis Visualization</CardTitle>
           </CardHeader>
           <CardContent>
-            
             <Line data={chartData} />
           </CardContent>
         </Card>
@@ -228,12 +225,7 @@ const AutoCrafter: React.FC = () => {
               </Button>
 
               {response && (
-                <Button
-                  variant="outline"
-                  className="w-32"
-                >
-                  <ReportDialog />
-                </Button>
+                <ReportDialog jsonData={response} />
               )}
             </div>
           </CardContent>
@@ -242,7 +234,7 @@ const AutoCrafter: React.FC = () => {
         {response && (
           <div className="mt-8 space-y-6">
             {renderTable(response)}
-            {renderChart(response)}
+            {'{renderChart(response)}'}
           </div>
         )}
       </div>

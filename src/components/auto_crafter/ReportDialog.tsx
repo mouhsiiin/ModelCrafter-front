@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { FormEvent, useState } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -12,23 +12,34 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Download } from 'lucide-react';
+import { PDFDocument, StandardFonts, rgb } from 'pdf-lib';
 
-const ReportDialog = (
-  jsonData: JSON,
-) => {
+interface JsonData {
+  [key: string]: string | number;
+}
+
+const ReportDialog = ({ jsonData }: { jsonData: JsonData[] }) => {
   const [open, setOpen] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     description: ''
   });
-  
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {//+
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Here you can handle the form submission
     console.log('Form submitted:', formData);
-    setOpen(false);
-    // Reset form
-    setFormData({ name: '', description: '' });
+
+    try {
+      // Call the createPDF function
+      await createPDF(formData.name, formData.description, jsonData);
+      console.log('PDF created successfully');
+
+      // Close the dialog and reset the form
+      setOpen(false);
+      setFormData({ name: '', description: '' });
+    } catch (error) {
+      console.error('Error creating PDF:', error);
+    }
   };
 
   const handleChange = (e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -39,18 +50,90 @@ const ReportDialog = (
     }));
   };
 
-  const onDownload = (
-    data: string,
-    filename: string,
-    json:  JSON,
-  ): void => {
-    const blob = new Blob([JSON.stringify(json)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = filename;
-    a.click();
-    URL.revokeObjectURL(url);
+  const createPDF = async (
+    title: string,
+    description: string,
+    jsonData: JsonData[],
+  ): Promise<void> => {
+    try {
+      // Create a new PDF document
+      const pdfDoc = await PDFDocument.create();
+      const page = pdfDoc.addPage();
+
+      const { width, height } = page.getSize();
+      const fontSize = 20;
+      const margin = 50;
+      const rowHeight = 20;
+      const columnWidth = 100;
+
+      // Draw title
+      page.drawText(title, {
+        x: margin,
+        y: height - margin,
+        size: fontSize,
+        font: await pdfDoc.embedFont(StandardFonts.Helvetica),
+        color: rgb(0, 0, 0),
+      });
+
+      // Draw description
+      page.drawText(description, {
+        x: margin,
+        y: height - margin - 30,
+        size: fontSize - 4,
+        font: await pdfDoc.embedFont(StandardFonts.Helvetica),
+        color: rgb(0, 0, 0),
+      });
+
+      // Draw table headers
+      const headers = Object.keys(jsonData[0]);
+      let y = height - margin - 60; // Starting Y position for the table
+      headers.forEach((header, colIndex) => {
+        page.drawText(header, {
+          x: margin + colIndex * columnWidth,
+          y,
+          size: fontSize - 4,
+          color: rgb(0, 0, 0),
+        });
+      });
+
+      // Draw table rows
+      jsonData.forEach((row, rowIndex) => {
+        y -= rowHeight; // Move down for the next row
+        headers.forEach((header, colIndex) => {
+          page.drawText(String(row[header]), {
+            x: margin + colIndex * columnWidth,
+            y,
+            size: fontSize - 4,
+            color: rgb(0, 0, 0),
+          });
+        });
+      });
+
+      // Draw table borders
+      const tableWidth = headers.length * columnWidth;
+      const tableHeight = (jsonData.length + 1) * rowHeight;
+      page.drawRectangle({
+        x: margin,
+        y: y - rowHeight,
+        width: tableWidth,
+        height: tableHeight,
+        borderColor: rgb(0, 0, 0),
+        borderWidth: 1,
+      });
+
+      // Save and download the PDF
+      const pdfBytes = await pdfDoc.save();
+      const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'report.pdf';
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Error in createPDF:', error);
+      throw error; // Re-throw the error to handle it in the calling function
+    }
   };
 
   return (
@@ -95,10 +178,7 @@ const ReportDialog = (
             >
               Cancel
             </Button>
-            <Button 
-              onAuxClick={() => onDownload(formData.name, formData.description, jsonData)}
-              type="submit"
-            >
+            <Button type="submit">
               <Download className="h-4 w-4 mr-2" />
               Create
             </Button>
