@@ -3,42 +3,18 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Download } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { downloadModel, getModel } from "@/services/models";
+import { downloadModel } from "@/services/models";
 import { ModelData } from "@/lib/types/models";
-import PredictionForm from "./PredictionForm";
-import { Column } from "./PredictionForm";
+import { Column_pre } from "./PredictionForm";
 import ConfusionMatrix from "./confusionMatrix";
 
 interface EvaluationSectionProps {
-  projectId: string;
+  modelData: ModelData | null;
+  Columns: Column_pre[] | null;
 }
 
-const EvaluationSection: React.FC<EvaluationSectionProps> = ({ projectId }) => {
-  const [modelData, setModelData] = useState<ModelData | null>(null);
-  const [columns, setColumns] = useState<Column[] | null>(null);
+const EvaluationSection: React.FC<EvaluationSectionProps> = ({ modelData }) => {
 
-  useEffect(() => {
-    const fetchModel = async () => {
-      try {
-        const model = await getModel(projectId);
-        setModelData(model);
-
-        // Transform feature_names into columns
-        const generatedColumns: Column[] = model.feature_names.map(
-          (feature) => ({
-            name: feature,
-            type: "text", // Ensure this matches the union type
-          })
-        );
-
-        setColumns(generatedColumns);
-      } catch (error) {
-        console.error("Failed to fetch model:", error);
-      }
-    };
-
-    fetchModel();
-  }, [projectId]);
 
   if (!modelData) {
     return (
@@ -55,10 +31,10 @@ const EvaluationSection: React.FC<EvaluationSectionProps> = ({ projectId }) => {
 
   const { performance_metrics, id } = modelData;
   const metrics = [
-    { name: "Accuracy", value: performance_metrics.accuracy },
-    { name: "Precision", value: performance_metrics.precision },
-    { name: "Recall", value: performance_metrics.recall },
-    { name: "F1 Score", value: performance_metrics.f1_score },
+    { name: "Accuracy", value: performance_metrics?.accuracy },
+    { name: "Precision", value: performance_metrics?.precision },
+    { name: "Recall", value: performance_metrics?.recall },
+    { name: "F1 Score", value: performance_metrics?.f1_score },
   ];
 
   const reg_metrics = [
@@ -179,8 +155,6 @@ const EvaluationSection: React.FC<EvaluationSectionProps> = ({ projectId }) => {
         </Card>
       </CardContent>
 
-      {/* prediction form */}
-      <PredictionForm columns={columns || []} modelId={modelData.id} />
     </Card>
   );
 };

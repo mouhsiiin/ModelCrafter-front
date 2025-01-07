@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { Upload, ChartNetwork, Gauge, Database, Cog } from "lucide-react";
 import {
   Card,
@@ -20,7 +20,14 @@ import { Slider } from "../ui/slider";
 import { PreprocessingOptions ,FileStats, Column } from "@/lib/types/preprocessing";
 import { parseFile } from "@/utils/fileParser";
 import { useParams } from "react-router-dom";
+import PredictionForm from "./PredictionForm";
+import { getModel } from "@/services/models";
+import { ModelData } from "@/lib/types/models";
+import { Column_pre } from "./PredictionForm";
 import api from "@/services/api";
+
+
+import Navigation from "../nav-bar/ModelCrafterSteps";
 
 
 
@@ -33,6 +40,31 @@ export const ProjectDetails = ( ) => {
   const [processedStats, setProcessedStats] = useState<FileStats | undefined>();
   const [isProcessing, setIsProcessing] = useState(false);
   const { projectId } = useParams<{ projectId: string }>();
+  const [modelData, setModelData] = useState<ModelData | null>(null);
+  const [columns, setColumns] = useState<Column_pre[] | null>(null);
+  
+  useEffect(() => {
+    const fetchModel = async () => {
+      try {
+        const model = await getModel(projectId ? projectId : "");
+        setModelData(model);
+
+        // Transform feature_names into columns
+        const generatedColumns: Column_pre[] = model.feature_names.map(
+          (feature) => ({
+            name: feature,
+            type: "text", // Ensure this matches the union type
+          })
+        );
+
+        setColumns(generatedColumns);
+      } catch (error) {
+        console.error("Failed to fetch model:", error);
+      }
+    };
+
+    fetchModel();
+  }, [projectId]);
 
   const handelFileAccepted = async (file: File) => {
     setUploadedFile(file);
@@ -68,6 +100,10 @@ export const ProjectDetails = ( ) => {
       title: "Evaluate",
       icon: <Gauge className="w-4 h-4" />,
     },
+    {
+      title: "Predict",
+      icon: <Gauge className="w-4 h-4" />,
+    }
   ];
 
   const handleNext = () => {
@@ -152,38 +188,6 @@ export const ProjectDetails = ( ) => {
     }
   }
 
-  const Navigation = () => (
-    <div className="w-full">
-      <Card className="p-6">
-        <CardHeader>
-          <CardTitle>Model Crafting Process</CardTitle>
-        </CardHeader>
-        <CardContent className="pb-6">
-          <Stepper
-            steps={steps}
-            currentStep={currentStep}
-            onStepChange={setCurrentStep}
-            orientation="horizontal"
-            variant="outline"
-            size="md"
-            showStepNumbers={true}
-            allowClickableSteps={true}
-          />
-        </CardContent>
-        <CardFooter className="flex justify-between pt-6 border-t">
-          <Button onClick={handlePrevious} disabled={currentStep === 0}>
-            Previous
-          </Button>
-          <Button
-            onClick={handleNext}
-          >
-            {currentStep === steps.length - 1 ? "Finish" : "Next"}
-          </Button>
-        </CardFooter>
-      </Card>
-    </div>
-  );
-
 
 
   const renderCurrentSection = () => {
@@ -204,7 +208,9 @@ export const ProjectDetails = ( ) => {
       case 3:
         return <ModelConfiguration />;
       case 4:
-        return <EvaluationSection projectId={projectId ? projectId : ""} />;
+        return <EvaluationSection modelData={modelData} Columns={columns} />;
+      case 5:
+        return <PredictionForm columns={columns} modelId={modelData?.id} target={modelData?.target_column} />;
       default:
         return <DataUploadSection onFileAccepted={handelFileAccepted} projectId={projectId} />;
     }
@@ -220,11 +226,14 @@ export const ProjectDetails = ( ) => {
       </header>
 
       {/* Navigation */}
-      <Navigation />
+      <Navigation steps={steps} currentStep={currentStep} setCurrentStep={setCurrentStep} />
 
       {/* Dynamic Section Rendering */}
       <main>{renderCurrentSection()}</main>
 
+
+      {currentStep == 0 && 
+        <div>
       {/* File Upload Controls */}
       {uploadedFile ? (
         <section aria-label="Data Controls">
@@ -251,6 +260,7 @@ export const ProjectDetails = ( ) => {
           No file uploaded. Please upload a file to view data.
         </p>
       )}
+      </div>}
     </div>
   );
 };

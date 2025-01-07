@@ -110,3 +110,20 @@ export const downloadModel = async (modelId: string | number): Promise<void> => 
         throw error;
     }
 };
+
+
+
+
+export const getUserModels = async (): Promise<ModelData[]> => {
+    try {
+        const response = await api.get<ModelData[]>('/models/my');
+        return response.data;
+    } catch (error) {
+        if (error instanceof Error) {
+            console.error('Error fetching models:', error.message);
+        } else {
+            console.error('Unknown error fetching models:', error);
+        }
+        throw error;
+    }
+}

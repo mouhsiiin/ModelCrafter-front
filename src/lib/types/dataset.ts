@@ -1,6 +1,7 @@
 export interface Dataset {
-    id: string;
-    name: string;
-    size: string;
-    uploadDate: string;
-  }
+  id: string;
+  name: string;
+  size: number;
+  shape: [number, number];
+  uploadedAt: string;
+}

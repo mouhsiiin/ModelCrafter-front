@@ -11,11 +11,14 @@ import { ProjectsPage } from '@/pages/projects';
 import { useAuth } from '@/context/auth';
 import { AutoCrafter } from '@/components/auto_crafter';
 import { VedioPage } from '@/components/demo';
+import ViewDataset from '@/components/dataset/ViewDataset';
+import ModelList from '@/components/trainedModels/model-list';
 
 // Main Routes Component
 export const AppRoutes = () => {
   const location = useLocation(); // Get current route location
   const { isAuthenticated } = useAuth(); // Get auth state
+  
 
   // Paths where Navbar should NOT appear
   const authPaths = ['/login', '/signup', '/guest'];
@@ -118,7 +121,16 @@ export const AppRoutes = () => {
           path="/datasets/:datasetId"
           element={
             <ProtectedRoute requireAuth={true}>
-              <DatasetList />
+              <ViewDataset />
+            </ProtectedRoute>
+          }
+        />
+        {/* models */}
+        <Route
+          path="/models"
+          element={
+            <ProtectedRoute requireAuth={true}>
+              <ModelList />
             </ProtectedRoute>
           }
         />

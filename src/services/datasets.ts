@@ -11,6 +11,11 @@ export const getProjectDatasets = async (projectId: string | undefined): Promise
     return response.data;
 };
 
+export const getUsersDatasets = async (): Promise<Dataset[]> => {
+    const response = await api.get<Dataset[]>('/datasets/mydatasets');
+    return response.data;
+}
+
 
 // get the dataset by id
 export const getDataset = async (datasetId: string): Promise<Dataset> => {

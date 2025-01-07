@@ -8,7 +8,7 @@ import _ from 'lodash';
 import { parseFile } from '@/utils/fileParser';
 
 interface DataTableProps {
-  file?: File;
+  file?: File | null;
   pageSize?: number;
 }
 

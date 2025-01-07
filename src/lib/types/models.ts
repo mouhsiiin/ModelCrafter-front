@@ -5,6 +5,7 @@ export interface ModelData {
   model_path: string;
   dataset_id: number;
   feature_names: string[];
+  target_column: string;
   created_at: string;
 }
 
