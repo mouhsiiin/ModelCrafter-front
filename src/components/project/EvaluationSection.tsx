@@ -38,10 +38,10 @@ const EvaluationSection: React.FC<EvaluationSectionProps> = ({ modelData }) => {
   ];
 
   const reg_metrics = [
-    { name: "Mean Squared Error (MSE)", value: performance_metrics.mse },
-    { name: "Root Mean Squared Error (RMSE)", value: performance_metrics.rmse },
-    { name: "Mean Absolute Error (MAE)", value: performance_metrics.mae },
-    { name: "R² Score", value: performance_metrics.r2_score },
+    { name: "Mean Squared Error (MSE)", value: performance_metrics?.mse },
+    { name: "Root Mean Squared Error (RMSE)", value: performance_metrics?.rmse },
+    { name: "Mean Absolute Error (MAE)", value: performance_metrics?.mae },
+    { name: "R² Score", value: performance_metrics?.r2_score },
   ];
 
   const handleDownload = async () => {

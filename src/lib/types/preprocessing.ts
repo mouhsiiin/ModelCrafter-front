@@ -2,7 +2,7 @@
 
 // Core enums for preprocessing options
 export enum MissingValuesHandling {
-    REMOVE = "remove",
+    REMOVE = "drop",
     MEAN = "mean",
     MEDIAN = "median",
     MODE = "mode",
@@ -25,7 +25,6 @@ export enum MissingValuesHandling {
     NONE = "none",
     PCA = "pca",
     TSNE = "tsne",
-    UMAP = "umap",
     LDA = "lda",
     TRUNCATEDSVD = "truncatedsvd",
   }
@@ -64,6 +63,7 @@ export enum MissingValuesHandling {
   export interface FileStats {
     columns: Column[];
     data: any[];
+    metadata?: any
   }
 
   export interface Column {

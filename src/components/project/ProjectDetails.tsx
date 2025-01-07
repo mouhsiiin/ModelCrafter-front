@@ -64,7 +64,7 @@ export const ProjectDetails = ( ) => {
     };
 
     fetchModel();
-  }, [projectId]);
+  }, [currentStep]);
 
   const handelFileAccepted = async (file: File) => {
     setUploadedFile(file);
@@ -106,20 +106,7 @@ export const ProjectDetails = ( ) => {
     }
   ];
 
-  const handleNext = () => {
 
-    // if in the last step, redirect to dashboard
-    if (currentStep === steps.length - 1) {
-      window.location.href = "/dashboard";
-    }
-
-    setCurrentStep((prev) => Math.min(prev + 1, steps.length - 1));
-  };
-
-  const handlePrevious = () => {
-    setCurrentStep((prev) => Math.max(prev - 1, 0));
-  };
-  
   const generateProcessedStats = useCallback((currentStats: FileStats, options: PreprocessingOptions): FileStats => {
     const processedColumns = currentStats.columns.map(column => {
       const processedColumn: Column = {
@@ -176,10 +163,13 @@ export const ProjectDetails = ( ) => {
         preview_stats: {
           columns: preview.columns
         },
-      }); 
+      });
 
-      if (response.status === 200) {
-        throw new Error('Failed to apply preprocessing');
+      if (response.data.status === "success") {
+        console.log('Preprocessing applied successfully:', response);
+        setProcessedStats({...preview, metadata: response.data.metadata});
+      } else {
+        console.error('Error in preprocessing:', response);
       }
     } catch (error) {
       console.error('Error in preprocessing:', error);

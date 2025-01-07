@@ -423,8 +423,6 @@ export const DataPreparationSection: React.FC<DataPreparationSectionProps> = ({
               <DataPreview fileStats={fileStats} fileSize={fileSize} processedStats={processedStats} />
             </CardContent>
           </Card>
-
-
         </div>
       </CardContent>
     </Card>
