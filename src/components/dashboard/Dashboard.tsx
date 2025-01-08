@@ -39,6 +39,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { DashboardMetrics } from './Metrics';
+import { getUserStats } from '@/services/api';
 
 export const Dashboard = () => {
   const [projects, setProjects] = useState<Project[]>([]);
@@ -46,6 +47,7 @@ export const Dashboard = () => {
   const [error, setError] = useState("");
   const [deletingProjectId, setDeletingProjectId] = useState<string | null>(null);
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
+  const [metrics, setMetrics] = useState({ projects: 0, datasets: 0, models: 0 });
   const { toast } = useToast();
 
   const fetchProjects = async () => {
@@ -62,8 +64,18 @@ export const Dashboard = () => {
     }
   };
 
+  const fetchMetrics = async () => {
+    try {
+      const data = await getUserStats();
+      setMetrics(data);
+    } catch (err) {
+      console.error("Error fetching user stats:", err);
+    }
+  };
+
   useEffect(() => {
     fetchProjects();
+    fetchMetrics();
   }, []);
 
   const handleDeleteProject = async (projectId: string) => {
@@ -121,54 +133,63 @@ export const Dashboard = () => {
             Manage your machine learning projects and datasets
           </p>
         </div>
-        <Dialog open={createDialogOpen} onOpenChange={setCreateDialogOpen}>
-          <DialogTrigger asChild>
-            <Button>Create Project</Button>
-          </DialogTrigger>
-          <DialogContent className="sm:max-w-[425px]">
-            <DialogHeader>
-              <DialogTitle>Create Project</DialogTitle>
-              <DialogDescription>
-                Create a new machine learning project. Click save when you're done.
-              </DialogDescription>
-            </DialogHeader>
-            <form onSubmit={handleCreateProject}>
-              <div className="grid gap-4 py-4">
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="name" className="text-right">
-                    Name
-                  </Label>
-                  <Input
-                    id="name"
-                    className="col-span-3"
-                    placeholder="Enter project name"
-                    required
-                  />
+        <div className='space-x-4'>
+          {/* Create project button */} 
+          <Dialog open={createDialogOpen} onOpenChange={setCreateDialogOpen}>
+            <DialogTrigger asChild>
+              <Button>Create Project</Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[425px]">
+              <DialogHeader>
+                <DialogTitle>Create Project</DialogTitle>
+                <DialogDescription>
+                  Create a new machine learning project. Click save when you're done.
+                </DialogDescription>
+              </DialogHeader>
+              <form onSubmit={handleCreateProject}>
+                <div className="grid gap-4 py-4">
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="name" className="text-right">
+                      Name
+                    </Label>
+                    <Input
+                      id="name"
+                      className="col-span-3"
+                      placeholder="Enter project name"
+                      required
+                    />
+                  </div>
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="description" className="text-right">
+                      Description
+                    </Label>
+                    <Input
+                      id="description"
+                      className="col-span-3"
+                      placeholder="Enter project description"
+                      required
+                    />
+                  </div>
                 </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="description" className="text-right">
-                    Description
-                  </Label>
-                  <Input
-                    id="description"
-                    className="col-span-3"
-                    placeholder="Enter project description"
-                    required
-                  />
-                </div>
-              </div>
-              <DialogFooter>
-                <Button type="submit">Save Project</Button>
-              </DialogFooter>
-            </form>
-          </DialogContent>
-        </Dialog>
+                <DialogFooter>
+                  <Button type="submit">Save Project</Button>
+                </DialogFooter>
+              </form>
+            </DialogContent>
+          </Dialog>
+          {/* Auto Crafter button */}
+          <Link to="/auto_crafter">
+            <Button>
+              Auto MLCrafter
+            </Button>
+          </Link>
+        </div>
       </div>
 
       <DashboardMetrics
-        projectCount={projects.length}
-        datasetCount={5}
-        modelCount={3}
+        projectCount={metrics?.projects}
+        datasetCount={metrics?.datasets}
+        modelCount={metrics?.models}
       />
 
       {error && (
@@ -214,14 +235,9 @@ export const Dashboard = () => {
                   </TableCell>
                   <TableCell>{project.created_at.toLocaleString()}</TableCell>
                   <TableCell className="text-right space-x-2">
-                    <Button asChild size="sm">
-                      <Link to={`/auto_crafter`}>
-                        AutoMCrafter
-                      </Link>
-                    </Button>
                     <Link to={`/projects/${project.id}`}>
                       <Button size="sm">
-                        Custom
+                        Open
                       </Button>
                     </Link>
                     <AlertDialog>

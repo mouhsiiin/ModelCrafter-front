@@ -161,7 +161,7 @@ const AutoCrafter: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gray-50 mt-16 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900">CSV Analysis Tool</h1>
@@ -234,7 +234,6 @@ const AutoCrafter: React.FC = () => {
         {response && (
           <div className="mt-8 space-y-6">
             {renderTable(response)}
-            {'{renderChart(response)}'}
           </div>
         )}
       </div>

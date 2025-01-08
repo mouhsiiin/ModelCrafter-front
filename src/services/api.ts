@@ -32,3 +32,9 @@ api.interceptors.response.use(
 );
 
 export default api;
+
+
+export const getUserStats = async () => {
+  const response = await api.get('users/stats');
+  return response.data;
+};

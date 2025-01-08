@@ -100,13 +100,6 @@ export function ModelList(): JSX.Element {
               <TableCell>
                 <div className="flex justify-end space-x-2">
                   <Button
-                    asChild
-                    size="sm"
-                    variant="outline"
-                  >
-                    <Link to={`/models/${model.id}`}>View</Link>
-                  </Button>
-                  <Button
                     variant="outline"
                     size="sm"
                     onClick={() => handleDownloadModel(model.id)}

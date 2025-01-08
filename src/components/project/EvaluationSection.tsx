@@ -123,7 +123,7 @@ const EvaluationSection: React.FC<EvaluationSectionProps> = ({ modelData }) => {
             </CardContent>
           </Card>
 
-          {modelData.performance_metrics.confusion_matrix && (
+          {(modelData.performance_metrics.confusion_matrix && modelData.performance_metrics.confusion_matrix !== undefined) && (
             <Card>
               <CardHeader>
                 <CardTitle className="text-lg">Confusion Matrix</CardTitle>

@@ -124,14 +124,9 @@ export function ProjectList() {
             <TableCell className="px-4 py-2">{project.created_at.toLocaleString()}</TableCell>
             <TableCell className="px-4 py-2 text-right">
               <div className="flex space-x-2 justify-end">
-                <Button asChild size="sm">
-                  <Link to={`/auto_crafter`}>
-                    AutoMCrafter
-                  </Link>
-                </Button>
                 <Link to={`/projects/${project.id}`}>
                   <Button size="sm">
-                    Custom
+                    Open
                   </Button>
                 </Link>
                 <AlertDialog>

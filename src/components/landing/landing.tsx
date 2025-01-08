@@ -46,13 +46,13 @@ export const LandingPage: React.FC = () => {
               </h2>
               <h1 className="text-5xl md:text-7xl font-bold tracking-tight">
                 <span className="bg-gradient-to-r from-teal-400 via-blue-500 to-purple-500 bg-clip-text text-transparent">
-                  Build, Train, Deploy
+                  Build, Train
                 </span>
                 <br />
                 <span className="text-white">Machine Learning Models</span>
               </h1>
               <p className="text-xl md:text-2xl text-gray-400 max-w-3xl mx-auto leading-relaxed">
-                An end-to-end platform for modern machine learning workflows. From data preprocessing to model deployment, we've got you covered.
+                An end-to-end platform for modern machine learning workflows. From data preprocessing to model ment, we've got you covered.
               </p>
             </div>
 
@@ -64,7 +64,7 @@ export const LandingPage: React.FC = () => {
                 </Button>
               </Link>
               <Link to="/demo">
-                <Button size="lg" variant="outline" className="border-gray-600 hover:border-teal-400 hover:bg-teal-400/10 transition-all duration-300 px-8 py-6 text-lg">
+                <Button size="lg" variant="outline" className="border-gray-600 hover:border-teal-400 text-black hover:text-white hover:bg-teal-400/10 transition-all duration-300 px-8 py-6 text-lg">
                   Watch Demo
                 </Button>
               </Link>
@@ -114,7 +114,7 @@ export const LandingPage: React.FC = () => {
               {
                 icon: Code,
                 title: "Custom Pipelines",
-                description: "Build and deploy custom ML pipelines with our intuitive workflow builder.",
+                description: "Build and  custom ML pipelines with our intuitive workflow builder.",
                 color: "blue",
               },
               {
@@ -143,7 +143,7 @@ export const LandingPage: React.FC = () => {
               },
             ].map(({ icon: Icon, title, description, color }) => (
               <FloatingElement key={title} delay={Math.random()}>
-                <Card className={`group h-full bg-gray-800/40 backdrop-blur-sm border-gray-700/50 hover:bg-${color}-900/20 transition-all duration-500`}>
+                <Card className={`group h-full bg-gray-800/40 backdrop-blur-sm  text-white border-gray-700/50 hover:bg-${color}-900/20 transition-all duration-500`}>
                   <CardHeader>
                     <div className={`p-3 rounded-lg bg-${color}-400/10 w-fit`}>
                       <Icon className={`h-6 w-6 text-${color}-400`} />
@@ -182,7 +182,7 @@ export const LandingPage: React.FC = () => {
           <Card className="bg-gradient-to-r from-gray-900 to-gray-800 border-0 shadow-[0_0_100px_rgba(45,212,191,0.1)]">
             <CardContent className="p-12">
               <div className="text-center space-y-8">
-                <h2 className="text-4xl font-bold">
+                <h2 className="text-4xl font-bold text-white">
                   Ready to Transform Your
                   <span className="bg-gradient-to-r from-teal-400 to-blue-500 bg-clip-text text-transparent ml-2">
                     ML Workflow?
